@@ -1,3 +1,9 @@
+*{
+    /* outline:1px solid green; */
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 /* General body styling */
 body {
     font-family: Arial, sans-serif;
@@ -104,9 +110,26 @@ tr:hover {
     background-color: #ddd;
 }
 .styled-image {
-    width: 50px; /* Adjust the width of the logo */
-    height: auto; /* Maintain aspect ratio */
+    width: 100px; /* Adjust the width of the logo */
+    height: 100px; /* Maintain aspect ratio */
     opacity: 1.5; /* Adjust the opacity as needed */
     vertical-align: middle; /* Align the image vertically with the text */
     margin-left: 10px; /* Adjust the space between the text and the image */
+}
+.frame{
+    display:flex;
+    justify-content:space-between;
+}
+.subhead{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.railwayhead{
+    display:flex;
+    gap: 20px;
+}
+.huge{
+    font-size: 30px;
+    font-weight: bold;
 }
