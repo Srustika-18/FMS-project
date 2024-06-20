@@ -8,10 +8,7 @@
 		/>
 		<title>Folder Browser</title>
 		<!-- Import Materialize CSS -->
-		<link
-			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-			rel="stylesheet"
-		/>
+
 		<link
 			rel="stylesheet"
 			href="styles.css"
@@ -19,34 +16,32 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="row">
-				<div
-					class="col s3 sidenav"
-					id="sidenav"
+			<div
+				class="col s3 sidenav"
+				id="sidenav"
+			>
+				<!-- Sidebar for root-level directories -->
+			</div>
+			<div class="col s9 main-content">
+				<h1>Folder Contents</h1>
+				<table
+					class="highlight responsive-table"
+					id="folder-table"
 				>
-					<!-- Sidebar for root-level directories -->
-				</div>
-				<div class="col s9 main-content">
-					<h1>Folder Contents</h1>
-					<table
-						class="highlight responsive-table"
-						id="folder-table"
-					>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- Table content will be populated here -->
-						</tbody>
-					</table>
-				</div>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Table content will be populated here -->
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<!-- Import Materialize JavaScript -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+		<script src="dummyData.js"></script>
 		<script src="script.js"></script>
 	</body>
 </html>
