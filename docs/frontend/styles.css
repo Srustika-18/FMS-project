@@ -3,6 +3,7 @@
 :root
 {
 	--accent-color: #a365ed;
+	--accent-color-hover: #68409a;
 	--body-color: #f1f1f1;
 	--secondary-color: #fff;
 	--text-color: #202020;
@@ -46,6 +47,7 @@ body
 	border-radius: 8px;
 }
 
+.sidenav a:hover,
 .sidenav a:hover
 {
 	background-color: var(--accent-color);
@@ -68,9 +70,78 @@ td
 {
 	padding: 0.75rem;
 	text-align: left;
+	border-radius: 8px;
+}
+
+.highlight tbody tr
+{
+	transition: background-color 250ms ease-in-out;
 }
 
 .highlight tbody tr:hover
 {
 	background-color: var(--secondary-color);
+}
+
+.btn-small
+{
+	background-image: linear-gradient(to right, var(--accent-color), var(--accent-color-hover));
+	color: var(--secondary-text-color);
+	border: none;
+	border-radius: 8px;
+	padding: 0.75em 1.5em;
+	background-size: 200%;
+	background-position: 0% 0%;
+	transition: background-position 250ms ease-in-out;
+	cursor: pointer;
+}
+
+.btn-small:is(:hover, :focus, :focus-visible)
+{
+	background-position: 100% 100%;
+}
+
+
+#loginButton
+{
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	cursor: pointer;
+}
+
+dialog
+{
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+}
+
+dialog::backdrop
+{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#loginModalContent
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#loginModalContent input
+{
+	width: 100%;
+	padding: 10px;
+	margin: 10px 0;
+}
+
+#closeModal
+{
+	align-self: flex-end;
+	cursor: pointer;
+	margin-top: -10px;
+	margin-right: -10px;
 }

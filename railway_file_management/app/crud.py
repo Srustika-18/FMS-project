@@ -6,7 +6,7 @@ from bson import ObjectId
 from .schemas import FileCreate, FolderCreate, Folder
 
 client = AsyncIOMotorClient('mongodb://localhost:27017')
-db = client.railway_file_management
+db = client.fileManagementDB
 
 predefined_admins = [
     # hashed "password1"
