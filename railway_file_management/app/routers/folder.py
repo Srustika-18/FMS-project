@@ -10,10 +10,10 @@ router = APIRouter(
     tags=["folders"],
 )
 
-@router.post("/")
-async def create_new_folder(folder: FolderCreate):
-    created_folder = await create_folder(folder)
-    return created_folder
+# @router.post("/")
+# async def create_new_folder(folder: FolderCreate):
+#     created_folder = await create_folder(folder)
+#     return created_folder
 
 @router.get("/{folder_id}")
 async def read_folder(folder_id: str):
