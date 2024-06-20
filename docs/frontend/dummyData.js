@@ -1,7 +1,7 @@
 const dummyFolders = [
 	{
 		_id: "1",
-		name: "Root Folder 1",
+		name: "Railway",
 		parent_folder_id: null,
 	},
 	{

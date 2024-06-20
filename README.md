@@ -24,7 +24,7 @@ cd FMS-project/railway_file_management
 Create a virtual environment in the project directory:
 
 ```sh
-python -m venv myvenv
+python -m venv venv
 ```
 
 ### 3. Activate the Virtual Environment
