@@ -26,9 +26,8 @@ document.addEventListener("DOMContentLoaded", async () =>
 		const rootFolders = await response.json();
 		rootFolders.forEach((folder) =>
 		{
-			const folderLink = document.createElement("a");
+			const folderLink = document.createElement("button");
 			folderLink.textContent = folder.name;
-			folderLink.href = "#";
 			folderLink.className = "collection-item";
 			folderLink.onclick = () =>
 			{

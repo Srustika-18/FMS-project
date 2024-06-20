@@ -1,3 +1,10 @@
+:root
+{
+	--body-color: #222;
+	--text-color: #000;
+	--secondary-color: #0c0812;
+}
+
 *
 {
 	/* outline: 1px solid green; */
@@ -9,7 +16,8 @@ header
 	justify-content: space-between;
 	align-items: center;
 	min-height: var(--navbar-height);
-	background-color: #18053d;
+	/* background-image: linear-gradient(to bottom, hsl(260, 85%, 10%) 75%, var(--body-color)); */
+	background-color: hsl(260, 85%, 10%);
 	color: var(--secondary-text-color);
 	padding-inline: var(--side-margin);
 }
@@ -64,22 +72,27 @@ header a
 .sidenav
 {
 	background-color: var(--secondary-color);
-	min-height: 100svh;
-	min-height: 100vh;
+	min-height: calc(100svh - var(--navbar-height));
+	min-height: calc(100vh - var(--navbar-height));
 	padding: 1rem;
+	display: grid;
+	/* align-items: center; */
+	gap: 0.5em;
+	justify-content: center;
 }
 
-.sidenav a
+.sidenav button
 {
-	display: block;
-	text-decoration: none;
-	color: var(--text-color);
+	border: none;
+	cursor: pointer;
+	color: var(--secondary-text-color);
 	padding: 1em 2em;
 	border-radius: 8px;
+	background-color: #333;
+	text-align: center;
 }
 
-.sidenav a:hover,
-.sidenav a:hover
+.sidenav button:hover
 {
 	background-color: var(--accent-color);
 	color: var(--secondary-text-color);
@@ -88,6 +101,7 @@ header a
 .main-content
 {
 	padding: 1rem;
+	color: var(--secondary-text-color);
 }
 
 table
@@ -154,8 +168,9 @@ dialog
 	border-radius: 5px;
 	box-shadow: 0 0.125rem 2rem 0.5rem color-mix(in lab, var(--accent-color) 20%, transparent);
 	padding: 2.5rem;
-	background-color: rgba(255, 255, 255, 1);
-	/* backdrop-filter: blur(40px); */
+	background-color: rgba(30, 30, 30, 1);
+	backdrop-filter: blur(40px);
+	color: var(--secondary-text-color);
 }
 
 dialog::backdrop
@@ -179,7 +194,7 @@ dialog::backdrop
 	border: none;
 	border-radius: 8px;
 	outline-color: var(--accent-color);
-	outline:none;
+	outline: none;
 }
 
 .input-box
@@ -190,7 +205,7 @@ dialog::backdrop
 
 .input-box::before
 {
-	content: "";
+	/* content: ""; */
 	position: absolute;
 	width: 100%;
 	bottom: 0;
@@ -210,4 +225,5 @@ dialog::backdrop
 	border: none;
 	background: none;
 	font-size: 2rem;
+	color: inherit;
 }
