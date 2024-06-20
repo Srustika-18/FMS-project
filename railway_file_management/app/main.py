@@ -8,5 +8,3 @@ app = FastAPI()
 app.include_router(admin.router)
 app.include_router(file.router)
 app.include_router(folder.router)
-
-

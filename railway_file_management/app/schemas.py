@@ -42,7 +42,7 @@ class File(FileBase):
 
 class FolderBase(BaseModel):
     foldername: str
-    parent_folder: Optional[PyObjectId] = None
+    parent_folder: Optional[PyObjectId]
 
 class FolderCreate(FolderBase):
     pass
