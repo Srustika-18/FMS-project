@@ -88,6 +88,7 @@ td
 	background-image: linear-gradient(to right, var(--accent-color), var(--accent-color-hover));
 	color: var(--secondary-text-color);
 	border: none;
+	margin: auto;
 	border-radius: 8px;
 	padding: 0.75em 1.5em;
 	background-size: 200%;
@@ -113,6 +114,10 @@ td
 
 dialog
 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	border: none;
 	border-radius: 5px;
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
