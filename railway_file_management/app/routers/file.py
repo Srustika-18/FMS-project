@@ -1,10 +1,9 @@
 # app/routers/file.py
 
 from fastapi import APIRouter, UploadFile, File as FastAPIFile
-from app.schemas import FileCreate  # Corrected import statement
+from app.schemas import FileCreate, PyObjectId  # Corrected import statement
 from app.crud import create_file, get_files  # Corrected import statement
 import aiofiles
-from bson import ObjectId
 
 router = APIRouter(
     prefix="/files",
@@ -21,7 +20,7 @@ async def upload_file(file: UploadFile, uploaded_by: str):
     file_data = {
         "filename": file.filename,
         "filepath": file_location,
-        "uploaded_by": ObjectId(uploaded_by)
+        "uploaded_by": PyObjectId(uploaded_by)
     }
     db_file = await create_file(file_data)
     
