@@ -1,6 +1,6 @@
 # app/schemas.py
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 from bson import ObjectId
 from typing import List, Optional
 
@@ -57,9 +57,12 @@ class Folder(FolderBase):
         orm_mode = True
 
 
-from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field
+
+class Admin(BaseModel):
+    username: str
+    hashed_password: str
+
 
 class folderSchema(BaseModel):
     # FolderID: str = Field(...)

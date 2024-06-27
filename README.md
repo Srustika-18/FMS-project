@@ -16,7 +16,7 @@ First, clone the repository to your local machine:
 
 ```sh
 git clone https://github.com/Srustika-18/FMS-project.git
-cd FMS-project/railway_file_management
+cd FMS-project/backend
 ```
 
 ### 2. Create a Virtual Environment

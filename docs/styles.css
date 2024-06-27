@@ -36,6 +36,10 @@ header a
 	text-decoration: none;
 	font-size: 1.15rem;
 }
+header a:hover
+{
+	color: var(--accent-color);
+}
 
 .fst
 {
@@ -100,6 +104,8 @@ header a
 
 .main-content
 {
+	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(images/home.webp);
+	background-size: cover;
 	padding: 1rem;
 	color: var(--secondary-text-color);
 }
@@ -113,9 +119,14 @@ table
 th,
 td
 {
-	padding: 0.75rem;
+	padding: 0.5rem;
 	text-align: left;
 	border-radius: 8px;
+}
+
+td
+{
+	background-color: hsla(0, 0%, 0%, 0.8);
 }
 
 .highlight tbody tr
@@ -125,7 +136,7 @@ td
 
 .highlight tbody tr:hover
 {
-	background-color: var(--secondary-color);
+	background-color: color-mix(in lab, var(--accent-color) 80%, transparent);
 }
 
 .btn-small
@@ -144,7 +155,7 @@ td
 
 .btn-small:is(:hover, :focus, :focus-visible)
 {
-	background-position: 100% 100%;
+	background-position: 99% 99%;
 }
 
 

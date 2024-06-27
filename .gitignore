@@ -1,3 +1,3 @@
-railway_file_management/venv/
-railway_file_management/app/__pycache__/
-railway_file_management/app/routers/__pycache__/
+backend/venv/
+backend/app/__pycache__/
+backend/app/routers/__pycache__/

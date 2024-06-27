@@ -5,3 +5,4 @@ passlib
 motor
 python-dotenv
 aiofiles
+python-jose
