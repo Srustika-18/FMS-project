@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException
 from app.schemas import FolderCreate, PyObjectId, ResponseModel, folderSchema  # Corrected import statement
-from app.crud import add_Folder
+from app.crud import add_Folder, retrieve_folders
 # , create_folder, get_folder, get_folders  # Corrected import statement
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
@@ -35,3 +35,9 @@ async def add_Folder_data(Folder: folderSchema = Body(...)):
     Folder = jsonable_encoder(Folder)
     new_Folder = await add_Folder(Folder) # type: ignore
     return ResponseModel(new_Folder, "Folder added successfully.")
+@router.get("/", response_description="Folder retrieved")
+async def get_folder():
+    folder = await retrieve_folders()
+    if folder:
+        return ResponseModel(folder, "folder data retrieved successfully")
+    return ResponseModel(folder, "Empty list returned")

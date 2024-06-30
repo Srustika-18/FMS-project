@@ -1,5 +1,6 @@
 # app/schemas.py
 
+from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
 from bson import ObjectId
 from typing import List, Optional
@@ -54,7 +55,7 @@ class Folder(FolderBase):
 
     class Config:
         json_encoders = {ObjectId: str}
-        orm_mode = True
+        from_attributes = True
 
 
 
@@ -65,11 +66,10 @@ class Admin(BaseModel):
 
 
 class folderSchema(BaseModel):
-    # FolderID: str = Field(...)
     Name: str = Field(...)
-    ParentfolderID: str = Field(...)
-    CreatedAt: str = Field(...)
-    UpdatedAt: str = Field(...)
+    ParentfolderID: Optional[str] = Field(None)
+    CreatedAt: datetime = Field(default_factory=datetime.utcnow)
+    UpdatedAt: datetime = Field(default_factory=datetime.utcnow)
     OwnerID: str = Field(...)
 
 class StudentSchema(BaseModel):
@@ -80,7 +80,7 @@ class StudentSchema(BaseModel):
     gpa: float = Field(..., le=4.0)
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "fullname": "John Doe",
                 "email": "jdoe@x.edu.ng",
@@ -99,7 +99,7 @@ class UpdateStudentModel(BaseModel):
     gpa: Optional[float]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "fullname": "John Doe",
                 "email": "jdoe@x.edu.ng",

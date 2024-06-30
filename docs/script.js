@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 		{
 			const response = await mockFetch("/folders");
 			const rootFolders = await response.json();
+			console.log("🚀 ~ rootFolders:", rootFolders)
 			sidenav.innerHTML = '';
 			rootFolders.forEach((folder) =>
 			{
