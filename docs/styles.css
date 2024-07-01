@@ -36,6 +36,7 @@ header a
 	text-decoration: none;
 	font-size: 1.15rem;
 }
+
 header a:hover
 {
 	color: var(--accent-color);
@@ -190,7 +191,8 @@ dialog::backdrop
 	backdrop-filter: blur(4px);
 }
 
-#loginModalContent
+#loginModalContent,
+#addFolderModalContent
 {
 	display: flex;
 	flex-direction: column;
@@ -198,7 +200,8 @@ dialog::backdrop
 	gap: 1em;
 }
 
-#loginModalContent input
+#loginModalContent input,
+#addFolderModalContent input
 {
 	width: 100%;
 	padding: 0.75em;

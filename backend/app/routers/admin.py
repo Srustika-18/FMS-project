@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel
 from app.crud import get_admin_by_username
 
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = "fmsproject"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

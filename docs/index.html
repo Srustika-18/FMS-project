@@ -56,6 +56,31 @@
 				</button>
 			</form>
 		</dialog>
+		<dialog id="addFolderModal">
+			<form id="addFolderModalContent">
+				<h2>Create New Folder</h2>
+				<label for="newFolderName">Folder Name:</label>
+				<input
+					type="text"
+					id="newFolderName"
+					name="newFolderName"
+					required
+				/>
+				<button
+					type="submit"
+					class="btn-small"
+				>
+					Create Folder
+				</button>
+				<button
+					type="button"
+					id="closeAddFolderModal"
+					class="btn-small"
+				>
+					Cancel
+				</button>
+			</form>
+		</dialog>
 		<header>
 			<div class="fst">
 				<img
@@ -101,6 +126,12 @@
 						</div>
 					</div>
 				</div>
+				<button
+					id="addFolderButton"
+					class="btn-small"
+				>
+					Add Folder
+				</button>
 				<table
 					class="highlight responsive-table"
 					id="folder-table"

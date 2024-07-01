@@ -16,19 +16,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 	document.getElementById('closeModal').addEventListener('click', hideLoginModal);
 	document.getElementById('loginModalContent').addEventListener('submit', handleLogin);
 
-	let authToken = localStorage.getItem('authToken');
-	let currentUsername = localStorage.getItem('currentUsername');
-	let currentFolderID = "";
-
-	if (authToken && currentUsername)
-	{
-		replaceLoginWithLogout();
-		await loadRootFolders();
-		document.getElementById('addFolderButton').style.display = 'block';
-	} else
-	{
-		document.getElementById('addFolderButton').style.display = 'none';
-	}
+	let authToken = null;
 
 	async function handleLogin(e)
 	{
@@ -56,19 +44,9 @@ document.addEventListener("DOMContentLoaded", async () =>
 
 			const data = await response.json();
 			authToken = data.access_token;
-
-			// Decode JWT to get the username
-			const payload = JSON.parse(atob(authToken.split('.')[1]));
-			currentUsername = payload.sub;
-
-			// Save to localStorage
-			localStorage.setItem('authToken', authToken);
-			localStorage.setItem('currentUsername', currentUsername);
-
 			hideLoginModal();
-			await loadRootFolders();
+			loadRootFolders();
 			replaceLoginWithLogout();
-			document.getElementById('addFolderButton').style.display = 'block';
 		} catch (error)
 		{
 			alert('Login failed: ' + error.message);
@@ -86,14 +64,10 @@ document.addEventListener("DOMContentLoaded", async () =>
 	function handleLogout()
 	{
 		authToken = null;
-		currentUsername = null;
-		localStorage.removeItem('authToken');
-		localStorage.removeItem('currentUsername');
 		const loginButton = document.getElementById('loginButton');
 		loginButton.textContent = 'Log In';
 		loginButton.removeEventListener('click', handleLogout);
 		loginButton.addEventListener('click', showLoginModal);
-		document.getElementById('addFolderButton').style.display = 'none';
 	}
 
 	const sidenav = document.getElementById("sidenav");
@@ -103,25 +77,25 @@ document.addEventListener("DOMContentLoaded", async () =>
 	{
 		try
 		{
-			const response = await fetch("http://127.0.0.1:8000/folders/0");
+			const response = await mockFetch("/folders");
 			const rootFolders = await response.json();
+			console.log("🚀 ~ rootFolders:", rootFolders)
 			sidenav.innerHTML = '';
-			rootFolders.data[0].forEach((folder) =>
+			rootFolders.forEach((folder) =>
 			{
 				const folderLink = document.createElement("button");
-				folderLink.textContent = folder.Name;
+				folderLink.textContent = folder.name;
 				folderLink.className = "collection-item";
 				folderLink.onclick = () =>
 				{
-					loadFolderContents(folder.FolderID, folder.Name);
-					currentFolderID = folder.FolderID;
+					loadFolderContents(folder._id, folder.name);
 					return false;
 				};
 				sidenav.appendChild(folderLink);
 			});
 		} catch (error)
 		{
-			console.log("🚀 ~ error:", error)
+			alert('Error loading root folders: ' + error.message);
 		}
 	}
 
@@ -129,17 +103,17 @@ document.addEventListener("DOMContentLoaded", async () =>
 	{
 		try
 		{
-			const response = await fetch(`http://127.0.0.1:8000/folders/${ folderId }`);
+			const response = await mockFetch(`/folders/${ folderId }`);
 			const folderContents = await response.json();
 			folderTableBody.innerHTML = '';
 
 			updateBreadcrumb(folderName);
 
-			folderContents.data[0].forEach((item) =>
+			folderContents.forEach((item) =>
 			{
 				const row = document.createElement("tr");
 				const nameCell = document.createElement("td");
-				nameCell.textContent = item.Name;
+				nameCell.textContent = item.name;
 				row.appendChild(nameCell);
 
 				const actionsCell = document.createElement("td");
@@ -148,13 +122,12 @@ document.addEventListener("DOMContentLoaded", async () =>
 				openLink.className = "btn-small";
 				openLink.onclick = () =>
 				{
-					if (item.ParentfolderID !== undefined)
+					if (item.parent_folder_id !== undefined)
 					{
-						loadFolderContents(item.FolderID, item.Name);
-						currentFolderID = item.FolderID;
+						loadFolderContents(item._id, item.name);
 					} else
 					{
-						alert(`File: ${ item.Name }`);
+						alert(`File: ${ item.name }`);
 					}
 					return false;
 				};
@@ -185,57 +158,6 @@ document.addEventListener("DOMContentLoaded", async () =>
 		breadcrumbLink.className = "breadcrumb";
 		breadcrumbNav.appendChild(breadcrumbLink);
 	}
-
-	function showAddFolderModal()
-	{
-		const addFolderModal = document.getElementById('addFolderModal');
-		addFolderModal.showModal();
-	}
-
-	function hideAddFolderModal()
-	{
-		const addFolderModal = document.getElementById('addFolderModal');
-		addFolderModal.close();
-	}
-
-	async function handleAddFolder(e)
-	{
-		e.preventDefault();
-		const folderName = document.getElementById('newFolderName').value;
-		const parentFolderID = currentFolderID;
-		const ownerID = currentUsername;
-
-		try
-		{
-			const response = await fetch('http://localhost:8000/folders/', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${ authToken }`,
-				},
-				body: JSON.stringify({
-					Name: folderName,
-					ParentfolderID: parentFolderID,
-					OwnerID: ownerID
-				})
-			});
-
-			if (!response.ok)
-			{
-				throw new Error('Folder creation failed');
-			}
-
-			await loadRootFolders();
-			hideAddFolderModal();
-		} catch (error)
-		{
-			alert('Folder creation failed: ' + error.message);
-		}
-	}
-
-	document.getElementById('addFolderButton').addEventListener('click', showAddFolderModal);
-	document.getElementById('closeAddFolderModal').addEventListener('click', hideAddFolderModal);
-	document.getElementById('addFolderModalContent').addEventListener('submit', handleAddFolder);
 
 	await loadRootFolders();
 });

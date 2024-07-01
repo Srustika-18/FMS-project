@@ -1,11 +1,14 @@
 # app/routers/folder.py
 
-from fastapi import APIRouter, HTTPException
-from app.schemas import FolderCreate, PyObjectId, ResponseModel, folderSchema  # Corrected import statement
-from app.crud import add_Folder, retrieve_folders
+from fastapi import APIRouter, Depends, HTTPException
+# Corrected import statement
+from app.schemas import FolderCreate, PyObjectId, ResponseModel, User, folderSchema
+from app.crud import add_folder, retrieve_folders, retrieve_folders_by_parent_id
 # , create_folder, get_folder, get_folders  # Corrected import statement
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
+
+from app.dependencies import get_current_admin
 
 router = APIRouter(
     prefix="/folders",
@@ -30,14 +33,33 @@ router = APIRouter(
 #     folders = await get_folders(parent_folder) # type: ignore
 #     return folders
 
+
 @router.post("/", response_description="Folder data added into the database")
-async def add_Folder_data(Folder: folderSchema = Body(...)):
+async def add_folder_data(Folder: folderSchema = Body(...), current_admin: User = Depends(get_current_admin)):
     Folder = jsonable_encoder(Folder)
-    new_Folder = await add_Folder(Folder) # type: ignore
+    new_Folder = await add_folder(Folder)  # type: ignore
     return ResponseModel(new_Folder, "Folder added successfully.")
+
+
 @router.get("/", response_description="Folder retrieved")
 async def get_folder():
     folder = await retrieve_folders()
     if folder:
         return ResponseModel(folder, "folder data retrieved successfully")
     return ResponseModel(folder, "Empty list returned")
+
+
+# @router.get("/root", response_description="Root folders retrieved")
+# async def get_root_folders():
+#     folders = await retrieve_root_folders()
+#     if folders:
+#         return ResponseModel(folders, "Root folders retrieved successfully.")
+#     return ResponseModel(folders, "No root folders found")
+
+
+@router.get("/{parent_id}", response_description="Folders retrieved by parent folder ID")
+async def get_folders_by_parent_id(parent_id: str):
+    folders = await retrieve_folders_by_parent_id(parent_id)
+    if folders:
+        return ResponseModel(folders, f"Folders with ParentfolderID {parent_id} retrieved successfully.")
+    return ResponseModel(folders, f"No folders found with ParentfolderID {parent_id}.")
