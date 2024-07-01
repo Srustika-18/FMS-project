@@ -5,6 +5,7 @@ from pydantic import BaseModel, EmailStr, Field
 from bson import ObjectId
 from typing import List, Optional
 
+
 class PyObjectId(ObjectId):
     @classmethod
     def __get_validators__(cls):
@@ -20,33 +21,43 @@ class PyObjectId(ObjectId):
     def __get_pydantic_json_schema__(cls, core_schema, handler):
         core_schema.update(type='string')
 
+
 class UserBase(BaseModel):
     username: str
 
+
 class User(UserBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+
     class Config:
         json_encoders = {ObjectId: str}
+
 
 class FileBase(BaseModel):
     filename: str
     filepath: str
 
+
 class FileCreate(FileBase):
     uploaded_by: PyObjectId
+
 
 class File(FileBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     user: User
+
     class Config:
         json_encoders = {ObjectId: str}
+
 
 class FolderBase(BaseModel):
     foldername: str
     parent_folder: Optional[PyObjectId]
 
+
 class FolderCreate(FolderBase):
     pass
+
 
 class Folder(FolderBase):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
@@ -56,8 +67,6 @@ class Folder(FolderBase):
     class Config:
         json_encoders = {ObjectId: str}
         from_attributes = True
-
-
 
 
 class Admin(BaseModel):
@@ -71,6 +80,16 @@ class folderSchema(BaseModel):
     CreatedAt: datetime = Field(default_factory=datetime.utcnow)
     UpdatedAt: datetime = Field(default_factory=datetime.utcnow)
     OwnerID: str = Field(...)
+
+
+class fileSchema(BaseModel):
+    Name: str = Field(...)
+    FolderID: Optional[str] = Field(None)
+    URL: str = Field(...)
+    CreatedAt: datetime = Field(default_factory=datetime.utcnow)
+    UpdatedAt: datetime = Field(default_factory=datetime.utcnow)
+    OwnerID: str = Field(...)
+
 
 class StudentSchema(BaseModel):
     fullname: str = Field(...)

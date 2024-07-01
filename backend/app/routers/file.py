@@ -1,33 +1,43 @@
-# app/routers/file.py
+# app/routers/files.py
 
-from fastapi import APIRouter, UploadFile, File as FastAPIFile
-from app.schemas import FileCreate, PyObjectId  # Corrected import statement
-# from app.crud import create_file, get_files  # Corrected import statement
-# import aiofiles
+import shutil
+from fastapi import APIRouter, Depends, UploadFile, File as FastAPIFile, HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
+from app.schemas import FileCreate, PyObjectId, ResponseModel, User
+from app.crud import add_file, retrieve_files_by_folder_id, get_admin_by_username
+from app.dependencies import get_current_admin
 
 router = APIRouter(
     prefix="/files",
     tags=["files"],
 )
 
-# @router.post("/")
-# async def upload_file(file: UploadFile, uploaded_by: str):
-#     file_location = f"files/{file.filename}"
-#     async with aiofiles.open(file_location, "wb") as f:
-#         content = await file.read()
-#         await f.write(content)
-    
-#     file_data = {
-#         "filename": file.filename,
-#         "filepath": file_location,
-#         "uploaded_by": PyObjectId(uploaded_by)
-#     }
-#     db_file = await create_file(file_data)
-    
-#     return {"filename": file.filename}
 
-# @router.get("/")
-# async def read_files(skip: int = 0, limit: int = 10):
-#     files = await get_files(skip=skip, limit=limit)
-#     return files
- 
+@router.post("/", response_description="File data added into the database")
+async def upload_file(folder_id: str, file: UploadFile = FastAPIFile(...), current_admin: User = Depends(get_current_admin)):
+    print(folder_id)
+    print(file)
+    if not current_admin:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    file_data = {
+        "Name": file.filename,
+        "FolderID": folder_id,
+        "URL": f"/uploads/{file.filename}",
+        "OwnerID": dict(current_admin)["username"]
+    }
+
+    new_file = await add_file(file_data)
+
+    # Save the file to the server
+    with open(f'app/uploads/{file.filename}', 'wb') as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    return ResponseModel(data=new_file, message="File uploaded successfully")
+
+
+@router.get("/{folder_id}/files", response_description="Files retrieved")
+async def get_files_in_folder(folder_id: str):
+    files = await retrieve_files_by_folder_id(folder_id)
+    return ResponseModel(data=files, message="Files retrieved successfully")

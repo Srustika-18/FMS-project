@@ -8,6 +8,7 @@ from .schemas import FileCreate, FolderCreate, Folder, PyObjectId
 client = AsyncIOMotorClient('mongodb://localhost:27017')
 database = client.file_management_system
 folders = database.get_collection("Folders")
+files = database.get_collection("Files")
 admins = database.get_collection("users")
 
 
@@ -35,6 +36,18 @@ def Folder_helper(Folder) -> dict:
         "CreatedAt": Folder["CreatedAt"],
         "UpdatedAt": Folder["UpdatedAt"],
         "OwnerID": Folder["OwnerID"],
+    }
+
+
+def File_helper(File) -> dict:
+    return {
+        "FileID": str(File["_id"]),
+        "Name": File["Name"],
+        "FolderID": File["FolderID"],
+        "URL": File["URL"],
+        "CreatedAt": File["CreatedAt"],
+        "UpdatedAt": File["UpdatedAt"],
+        "OwnerID": File["OwnerID"],
     }
 
 
@@ -117,3 +130,20 @@ async def add_folder(folder_data: dict) -> dict:
     folder = await folders.insert_one(folder_data)
     new_folder = await folders.find_one({"_id": folder.inserted_id})
     return Folder_helper(new_folder)
+
+
+# Add a new file into the database
+async def add_file(file_data: dict) -> dict:
+    current_time = datetime.now()
+    file_data['CreatedAt'] = current_time
+    file_data['UpdatedAt'] = current_time
+    file = await files.insert_one(file_data)
+    new_file = await files.find_one({"_id": file.inserted_id})
+    return File_helper(new_file)
+
+# Retrieve files by folder ID
+async def retrieve_files_by_folder_id(folder_id: str):
+    files_list = []
+    async for file in files.find({"FolderID": folder_id}):
+        files_list.append(File_helper(file))
+    return files_list

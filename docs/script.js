@@ -18,16 +18,19 @@ document.addEventListener("DOMContentLoaded", async () =>
 
 	let authToken = localStorage.getItem('authToken');
 	let currentUsername = localStorage.getItem('currentUsername');
-	let currentFolderID = "";
+	let currentFolderID = "0";
+	let currentFolderName = "";
 
 	if (authToken && currentUsername)
 	{
 		replaceLoginWithLogout();
 		await loadRootFolders();
-		document.getElementById('addFolderButton').style.display = 'block';
+		document.getElementById('addFolderButton').style.display = 'inline-block';
+		document.getElementById('addFileButton').style.display = 'inline-block';
 	} else
 	{
 		document.getElementById('addFolderButton').style.display = 'none';
+		document.getElementById('addFileButton').style.display = 'none';
 	}
 
 	async function handleLogin(e)
@@ -68,7 +71,9 @@ document.addEventListener("DOMContentLoaded", async () =>
 			hideLoginModal();
 			await loadRootFolders();
 			replaceLoginWithLogout();
-			document.getElementById('addFolderButton').style.display = 'block';
+
+			document.getElementById('addFolderButton').style.display = 'inline-block';
+			document.getElementById('addFileButton').style.display = 'inline-block';
 		} catch (error)
 		{
 			alert('Login failed: ' + error.message);
@@ -115,6 +120,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 				{
 					loadFolderContents(folder.FolderID, folder.Name);
 					currentFolderID = folder.FolderID;
+					currentFolderName = folder.Name;
 					return false;
 				};
 				sidenav.appendChild(folderLink);
@@ -122,6 +128,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 		} catch (error)
 		{
 			console.log("🚀 ~ error:", error)
+			// alert('Error loading root folders: ' + error.message);
 		}
 	}
 
@@ -152,9 +159,10 @@ document.addEventListener("DOMContentLoaded", async () =>
 					{
 						loadFolderContents(item.FolderID, item.Name);
 						currentFolderID = item.FolderID;
+						currentFolderName = item.Name;
 					} else
 					{
-						alert(`File: ${ item.Name }`);
+						window.open(`http://127.0.0.1:8000${ item.URL }`, '_blank');
 					}
 					return false;
 				};
@@ -186,16 +194,17 @@ document.addEventListener("DOMContentLoaded", async () =>
 		breadcrumbNav.appendChild(breadcrumbLink);
 	}
 
+	const addFolderModal = document.getElementById('addFolderModal');
+
 	function showAddFolderModal()
 	{
-		const addFolderModal = document.getElementById('addFolderModal');
 		addFolderModal.showModal();
 	}
 
 	function hideAddFolderModal()
 	{
-		const addFolderModal = document.getElementById('addFolderModal');
 		addFolderModal.close();
+		document.getElementById('newFolderName').value = "";
 	}
 
 	async function handleAddFolder(e)
@@ -225,17 +234,69 @@ document.addEventListener("DOMContentLoaded", async () =>
 				throw new Error('Folder creation failed');
 			}
 
-			await loadRootFolders();
 			hideAddFolderModal();
+			await loadFolderContents(currentFolderID, currentFolderName);
 		} catch (error)
 		{
-			alert('Folder creation failed: ' + error.message);
+			alert('Folder creation failed: ' + error.message + '\nTry logging out then logging in.');
+		}
+	}
+
+
+	const addFileModal = document.getElementById('addFileModal');
+
+	function showAddFileModal()
+	{
+		addFileModal.showModal();
+	}
+
+	function hideAddFileModal()
+	{
+		addFileModal.close();
+		document.getElementById('newFileName').value = "";
+	}
+
+	async function handleAddFile(e)
+	{
+		e.preventDefault();
+		const fileName = document.getElementById('newFileName');
+		const file = fileName.files[0];
+
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('FolderID', currentFolderID);
+
+		try
+		{
+			const response = await fetch(`http://127.0.0.1:8000/files/?folder_id=${ currentFolderID }`, {
+				method: 'POST',
+				headers: {
+					'Authorization': `Bearer ${ authToken }`,
+				},
+				body: formData
+			});
+
+			if (!response.ok)
+			{
+				throw new Error('File upload failed');
+			}
+
+			alert('File uploaded successfully');
+			hideAddFileModal();
+			await loadFolderContents(currentFolderID, currentFolderName);
+		}
+		catch (error)
+		{
+			alert('File creation failed: ' + error.message + '\nTry logging out then logging in.');
 		}
 	}
 
 	document.getElementById('addFolderButton').addEventListener('click', showAddFolderModal);
+	document.getElementById('addFileButton').addEventListener('click', showAddFileModal);
 	document.getElementById('closeAddFolderModal').addEventListener('click', hideAddFolderModal);
+	document.getElementById('closeAddFileModal').addEventListener('click', hideAddFileModal);
 	document.getElementById('addFolderModalContent').addEventListener('submit', handleAddFolder);
+	document.getElementById('addFileModalContent').addEventListener('submit', handleAddFile);
 
 	await loadRootFolders();
 });

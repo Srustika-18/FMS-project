@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 # Corrected import statement
 from app.schemas import FolderCreate, PyObjectId, ResponseModel, User, folderSchema
-from app.crud import add_folder, retrieve_folders, retrieve_folders_by_parent_id
+from app.crud import add_folder, retrieve_files_by_folder_id, retrieve_folders, retrieve_folders_by_parent_id
 # , create_folder, get_folder, get_folders  # Corrected import statement
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
@@ -60,6 +60,7 @@ async def get_folder():
 @router.get("/{parent_id}", response_description="Folders retrieved by parent folder ID")
 async def get_folders_by_parent_id(parent_id: str):
     folders = await retrieve_folders_by_parent_id(parent_id)
-    if folders:
-        return ResponseModel(folders, f"Folders with ParentfolderID {parent_id} retrieved successfully.")
+    files = await retrieve_files_by_folder_id(parent_id)
+    if folders or files:
+        return ResponseModel(folders + files, f"Folders with ParentfolderID {parent_id} retrieved successfully.")
     return ResponseModel(folders, f"No folders found with ParentfolderID {parent_id}.")
