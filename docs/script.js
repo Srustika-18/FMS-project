@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 		loginButton.removeEventListener('click', handleLogout);
 		loginButton.addEventListener('click', showLoginModal);
 		document.getElementById('addFolderButton').style.display = 'none';
+		document.getElementById('addFileButton').style.display = 'none';
 	}
 
 	const sidenav = document.getElementById("sidenav");
