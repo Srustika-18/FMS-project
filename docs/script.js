@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", async () =>
 		loginButton.addEventListener('click', showLoginModal);
 		document.getElementById('addFolderButton').style.display = 'none';
 		document.getElementById('addFileButton').style.display = 'none';
+		loadFolderContents(currentFolderID, currentFolderName); // Refresh folder contents
 	}
 
 	const sidenav = document.getElementById("sidenav");
@@ -125,11 +126,36 @@ document.addEventListener("DOMContentLoaded", async () =>
 					return false;
 				};
 				sidenav.appendChild(folderLink);
+				loadFolderContents(currentFolderID, currentFolderName);
 			});
 		} catch (error)
 		{
 			console.log("🚀 ~ error:", error)
 			// alert('Error loading root folders: ' + error.message);
+		}
+	}
+
+	async function handleDeleteFolder(folderId)
+	{
+		try
+		{
+			const response = await fetch(`http://127.0.0.1:8000/folders/${ folderId }`, {
+				method: 'DELETE',
+				headers: {
+					'Authorization': `Bearer ${ authToken }`,
+				},
+			});
+
+			if (!response.ok)
+			{
+				throw new Error('Folder deletion failed');
+			}
+
+			alert('Folder deleted successfully');
+			await loadFolderContents(currentFolderID, currentFolderName);
+		} catch (error)
+		{
+			alert('Folder deletion failed: ' + error.message + '\nTry logging out then logging in.');
 		}
 	}
 
@@ -168,8 +194,20 @@ document.addEventListener("DOMContentLoaded", async () =>
 					return false;
 				};
 				actionsCell.appendChild(openLink);
-				row.appendChild(actionsCell);
 
+				if (authToken)
+				{  // Only show delete button if the user is authenticated
+					const deleteButton = document.createElement("button");
+					deleteButton.textContent = "Delete";
+					deleteButton.className = "btn-small delete-btn";
+					deleteButton.onclick = async () =>
+					{
+						await handleDeleteFolder(item.FolderID);
+					};
+					actionsCell.appendChild(deleteButton);
+				}
+
+				row.appendChild(actionsCell);
 				folderTableBody.appendChild(row);
 			});
 		} catch (error)

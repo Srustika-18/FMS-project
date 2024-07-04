@@ -2,10 +2,8 @@
 
 import shutil
 from fastapi import APIRouter, Depends, UploadFile, File as FastAPIFile, HTTPException
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
-from app.schemas import FileCreate, PyObjectId, ResponseModel, User
-from app.crud import add_file, retrieve_files_by_folder_id, get_admin_by_username
+from app.schemas import ResponseModel, User
+from app.crud import add_file, retrieve_files_by_folder_id
 from app.dependencies import get_current_admin
 
 router = APIRouter(
