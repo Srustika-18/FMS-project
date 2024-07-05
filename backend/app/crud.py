@@ -1,6 +1,7 @@
 # app/crud.py
 
 from datetime import datetime
+import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.schemas import PyObjectId
 
@@ -62,6 +63,42 @@ async def delete_student(id: str):
         return True
 
 
+# Files CRUD ---------------------------------------------
+
+# Retrieve files by folder ID
+async def retrieve_files_by_folder_id(folder_id: str):
+    files_list = []
+    async for file in files.find({"FolderID": folder_id}):
+        files_list.append(File_helper(file))
+    return files_list
+
+
+# Add a new file into the database
+async def add_file(file_data: dict) -> dict:
+    current_time = datetime.now()
+    file_data['CreatedAt'] = current_time
+    file_data['UpdatedAt'] = current_time
+    file = await files.insert_one(file_data)
+    new_file = await files.find_one({"_id": file.inserted_id})
+    return File_helper(new_file)
+
+
+# Delete a file from the database
+async def delete_file(id: str):
+    file = await files.find_one({"_id": PyObjectId(id)})
+    if file:
+        try:
+            os.remove(f"app{file['URL']}")
+        except FileNotFoundError:
+            pass
+        except Exception as e:
+            return False, str(e)
+
+        await files.delete_one({"_id": PyObjectId(id)})
+        return True, None
+    return False, "File not found"
+
+
 # Folders CRUD ---------------------------------------------
 
 # Retrieve all folder present in the database
@@ -90,29 +127,14 @@ async def add_folder(folder_data: dict) -> dict:
     return Folder_helper(new_folder)
 
 
-# Delete a folder from the database
+# Delete a folder and its files from the database
 async def delete_folder(id: str):
     folder = await folders.find_one({"_id": PyObjectId(id)})
     if folder:
+        # Delete all files in the folder
+        async for file in files.find({"FolderID": id}):
+            await delete_file(str(file["_id"]))
+
         await folders.delete_one({"_id": PyObjectId(id)})
         return True
-
-
-# Files CRUD ---------------------------------------------
-
-# Retrieve files by folder ID
-async def retrieve_files_by_folder_id(folder_id: str):
-    files_list = []
-    async for file in files.find({"FolderID": folder_id}):
-        files_list.append(File_helper(file))
-    return files_list
-
-
-# Add a new file into the database
-async def add_file(file_data: dict) -> dict:
-    current_time = datetime.now()
-    file_data['CreatedAt'] = current_time
-    file_data['UpdatedAt'] = current_time
-    file = await files.insert_one(file_data)
-    new_file = await files.find_one({"_id": file.inserted_id})
-    return File_helper(new_file)
+    return False

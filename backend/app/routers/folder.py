@@ -1,6 +1,6 @@
 # app/routers/folder.py
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.schemas import ResponseModel, User, folderSchema
 from app.crud import add_folder, delete_folder, retrieve_files_by_folder_id, retrieve_folders, retrieve_folders_by_parent_id
 from fastapi import APIRouter, Body
@@ -37,9 +37,12 @@ async def get_folders_by_parent_id(parent_id: str):
     return ResponseModel(folders, f"No folders found with ParentfolderID {parent_id}.")
 
 
-@router.delete("/{id}", response_description="Folders retrieved by parent folder ID")
+@router.delete("/{id}", response_description="Folder deleted by id")
 async def delete_folder_by_id(id: str, current_admin: User = Depends(get_current_admin)):
+    if not current_admin:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
     folder = await delete_folder(id)
     if folder:
         return ResponseModel(folder, f"Folder with id: {id} deleted successfully.")
-    return ResponseModel(folder, f"No folders found with id {id}.")
+    return ResponseModel(folder, f"No folder found with id {id}.")

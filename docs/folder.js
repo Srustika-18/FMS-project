@@ -1,7 +1,9 @@
+import { handleDeleteFile } from './file.js'
+
 const sidenav = document.getElementById("sidenav");
 const folderTableBody = document.querySelector("#folder-table tbody");
-let authToken = localStorage.getItem('authToken');
-let currentUsername = localStorage.getItem('currentUsername');
+// let authToken = localStorage.getItem('authToken');
+// let currentUsername = localStorage.getItem('currentUsername');
 
 let currentFolderID = "0";
 let currentFolderName = "";
@@ -46,29 +48,6 @@ export async function loadRootFolders()
 	}
 }
 
-export async function handleDeleteFolder(folderId)
-{
-	try
-	{
-		const response = await fetch(`http://127.0.0.1:8000/folders/${ folderId }`, {
-			method: 'DELETE',
-			headers: {
-				'Authorization': `Bearer ${ localStorage.getItem('authToken') }`,
-			},
-		});
-
-		if (!response.ok)
-		{
-			throw new Error('Folder deletion failed');
-		}
-
-		alert('Folder deleted successfully');
-		await loadFolderContents(currentFolderID, currentFolderName);
-	} catch (error)
-	{
-		alert('Folder deletion failed: ' + error.message + '\nTry logging out then logging in.');
-	}
-}
 
 export async function loadFolderContents(folderId, folderName)
 {
@@ -88,7 +67,7 @@ export async function loadFolderContents(folderId, folderName)
 			row.appendChild(nameCell);
 
 			const actionsCell = document.createElement("td");
-			actionsCell.className = "action-container"
+			actionsCell.className = "action-container";
 			const openLink = document.createElement("button");
 			openLink.textContent = "Open";
 			openLink.className = "btn-small";
@@ -112,9 +91,11 @@ export async function loadFolderContents(folderId, folderName)
 				const deleteButton = document.createElement("button");
 				deleteButton.textContent = "Delete";
 				deleteButton.className = "btn-small delete-btn";
+				deleteButton.setAttribute('data-id', item.FolderID || item.FileID);
+				deleteButton.setAttribute('data-type', item.ParentfolderID !== undefined ? 'folder' : 'file');
 				deleteButton.onclick = async () =>
 				{
-					await handleDeleteFolder(item.FolderID);
+					await handleDelete(item.FileID || item.FolderID, item.ParentfolderID !== undefined ? 'folder' : 'file');
 				};
 				actionsCell.appendChild(deleteButton);
 			}
@@ -190,5 +171,40 @@ export async function handleAddFolder(e)
 	} catch (error)
 	{
 		alert('Folder creation failed: ' + error.message + '\nTry logging out then logging in.');
+	}
+}
+
+export async function handleDeleteFolder(folderId)
+{
+	try
+	{
+		const response = await fetch(`http://127.0.0.1:8000/folders/${ folderId }`, {
+			method: 'DELETE',
+			headers: {
+				'Authorization': `Bearer ${ localStorage.getItem('authToken') }`,
+			},
+		});
+
+		if (!response.ok)
+		{
+			throw new Error('Folder deletion failed');
+		}
+
+		alert('Folder deleted successfully');
+		await loadFolderContents(currentFolderID, currentFolderName);
+	} catch (error)
+	{
+		alert('Folder deletion failed: ' + error.message + '\nTry logging out then logging in.');
+	}
+}
+
+async function handleDelete(id, type)
+{
+	if (type === 'folder')
+	{
+		await handleDeleteFolder(id);
+	} else if (type === 'file')
+	{
+		await handleDeleteFile(id);
 	}
 }

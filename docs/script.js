@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", async () =>
 
 	let authToken = localStorage.getItem('authToken');
 	let currentUsername = localStorage.getItem('currentUsername');
-	let currentFolderID = "0";
-	let currentFolderName = "";
 
 	if (authToken && currentUsername)
 	{

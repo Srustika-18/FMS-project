@@ -3,7 +3,7 @@
 import shutil
 from fastapi import APIRouter, Depends, UploadFile, File as FastAPIFile, HTTPException
 from app.schemas import ResponseModel, User
-from app.crud import add_file, retrieve_files_by_folder_id
+from app.crud import add_file, delete_file, retrieve_files_by_folder_id
 from app.dependencies import get_current_admin
 
 router = APIRouter(
@@ -31,7 +31,7 @@ async def upload_file(folder_id: str, file: UploadFile = FastAPIFile(...), curre
     # Save the file to the server
     with open(f'app/uploads/{file.filename}', 'wb') as buffer:
         shutil.copyfileobj(file.file, buffer)
-    
+
     return ResponseModel(data=new_file, message="File uploaded successfully")
 
 
@@ -39,3 +39,17 @@ async def upload_file(folder_id: str, file: UploadFile = FastAPIFile(...), curre
 async def get_files_in_folder(folder_id: str):
     files = await retrieve_files_by_folder_id(folder_id)
     return ResponseModel(data=files, message="Files retrieved successfully")
+
+
+@router.delete("/{file_id}", response_description="File deleted from the database")
+async def delete_file_by_id(file_id: str, current_admin: User = Depends(get_current_admin)):
+    if not current_admin:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    file, error_message = await delete_file(file_id)
+    if file:
+        return ResponseModel(file, f"File with id: {file_id} deleted successfully.")
+    if error_message:
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting file: {error_message}")
+    return ResponseModel(file, f"No file found with id {file_id}.")
