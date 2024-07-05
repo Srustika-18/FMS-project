@@ -45,7 +45,11 @@ pip install -r requirements.txt
 
 ### 5. Run the Project
 
-
 ```sh
 uvicorn app.main:app --reload
 ```
+
+### 6. Visit the website at
+
+[East Coast Railway](http://127.0.0.1:8000/)
+( http://127.0.0.1:8000/ )

@@ -247,3 +247,20 @@ dialog>form input
 	font-size: 2rem;
 	color: inherit;
 }
+
+.action-container
+{
+	display: flex;
+	gap: 1rem;
+}
+
+.delete-btn
+{
+	background-image: none;
+	background-color: red;
+}
+
+.delete-btn:hover
+{
+	background-color: color-mix(in lab, red 80%, black);
+}
