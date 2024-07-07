@@ -111,6 +111,43 @@ header a:hover
 	color: var(--secondary-text-color);
 }
 
+.heading-container
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.nav-wrapper
+{
+	display: flex;
+	gap: 0.25rem;
+}
+
+.search-side
+{
+	width: 30%;
+}
+
+.search-box
+{
+	border: none;
+	border-radius: 8px;
+	width: 100%;
+	padding: 0.5rem;
+}
+
+.nav-wrapper p:not(:first-child):before
+{
+	content: " > ";
+}
+
+.search-box:is(:focus-visible)
+{
+	outline: 2px solid var(--accent-color);
+	outline-offset: 0.125rem;
+}
+
 table
 {
 	width: 100%;
@@ -138,6 +175,11 @@ td
 .highlight tbody tr:hover
 {
 	background-color: color-mix(in lab, var(--accent-color) 80%, transparent);
+}
+
+td:nth-child(1)
+{
+	width: 30%;
 }
 
 .btn-container

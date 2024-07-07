@@ -2,12 +2,14 @@ import { showLoginModal, hideLoginModal, handleLogin, replaceLoginWithLogout, ha
 import { loadRootFolders, loadFolderContents } from './folder.js';
 import { showAddFolderModal, hideAddFolderModal, handleAddFolder, handleDeleteFolder } from './folder.js';
 import { showAddFileModal, hideAddFileModal, handleAddFile } from './file.js';
+import { searchText } from './search.js';
 
 document.addEventListener("DOMContentLoaded", async () =>
 {
 	document.getElementById('loginButton').addEventListener('click', showLoginModal);
 	document.getElementById('closeModal').addEventListener('click', hideLoginModal);
 	document.getElementById('loginModalContent').addEventListener('submit', handleLogin);
+	document.getElementById('searchBox').addEventListener('input', searchText);
 
 	let authToken = localStorage.getItem('authToken');
 	let currentUsername = localStorage.getItem('currentUsername');

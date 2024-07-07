@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from app.schemas import ResponseModel, User, folderSchema
-from app.crud import add_folder, delete_folder, retrieve_files_by_folder_id, retrieve_folders, retrieve_folders_by_parent_id
+from app.crud import add_folder, delete_folder, retrieve_files_by_folder_id, retrieve_folders, retrieve_folders_by_parent_id, search_folders_and_files
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
 from app.dependencies import get_current_admin
@@ -46,3 +46,10 @@ async def delete_folder_by_id(id: str, current_admin: User = Depends(get_current
     if folder:
         return ResponseModel(folder, f"Folder with id: {id} deleted successfully.")
     return ResponseModel(folder, f"No folder found with id {id}.")
+
+
+# Search ---------------------------
+@router.get("/search/", response_description="Search folders and files by name")
+async def search_folders_and_files_by_name(query: str):
+    result = await search_folders_and_files(query)
+    return ResponseModel(result, "Search results retrieved successfully")

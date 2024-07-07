@@ -138,3 +138,20 @@ async def delete_folder(id: str):
         await folders.delete_one({"_id": PyObjectId(id)})
         return True
     return False
+
+
+# Search ---------------------
+
+# Search for folders and files
+# Search folders and files by name
+async def search_folders_and_files(query: str):
+    folders_list = []
+    files_list = []
+
+    async for folder in folders.find({"Name": {"$regex": query, "$options": "i"}}):
+        folders_list.append(Folder_helper(folder))
+
+    async for file in files.find({"Name": {"$regex": query, "$options": "i"}}):
+        files_list.append(File_helper(file))
+
+    return {"folders": folders_list, "files": files_list}

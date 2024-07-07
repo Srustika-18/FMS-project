@@ -7,6 +7,7 @@ const folderTableBody = document.querySelector("#folder-table tbody");
 
 let currentFolderID = "0";
 let currentFolderName = "";
+let folderHistory = [];
 
 export function getCurrentFolderID()
 {
@@ -36,6 +37,8 @@ export async function loadRootFolders()
 				loadFolderContents(folder.FolderID, folder.Name);
 				currentFolderID = folder.FolderID;
 				currentFolderName = folder.Name;
+				folderHistory = []; // Clear history when at root
+				updateBreadcrumb();
 				return false;
 			};
 			sidenav.appendChild(folderLink);
@@ -57,7 +60,31 @@ export async function loadFolderContents(folderId, folderName)
 		const folderContents = await response.json();
 		folderTableBody.innerHTML = '';
 
-		updateBreadcrumb(folderName);
+		updateBreadcrumb();
+
+		// Add "Parent Folder" button row if not at the root level
+		if (folderId !== "0" && folderHistory.length > 0)
+		{
+			const parentRow = document.createElement("tr");
+			const parentCell = document.createElement("td");
+			parentCell.colSpan = 2;
+
+			const parentButton = document.createElement("button");
+			parentButton.textContent = "Go to Parent Folder";
+			parentButton.className = "btn-small";
+			parentButton.onclick = () =>
+			{
+				const previousFolder = folderHistory.pop();
+				loadFolderContents(previousFolder.id, previousFolder.name);
+				currentFolderID = previousFolder.id;
+				currentFolderName = previousFolder.name;
+				updateBreadcrumb();
+				return false;
+			};
+			parentCell.appendChild(parentButton);
+			parentRow.appendChild(parentCell);
+			folderTableBody.appendChild(parentRow);
+		}
 
 		folderContents.data[0].forEach((item) =>
 		{
@@ -75,9 +102,11 @@ export async function loadFolderContents(folderId, folderName)
 			{
 				if (item.ParentfolderID !== undefined)
 				{
+					folderHistory.push({ id: folderId, name: folderName }); // Push current folder to history
 					loadFolderContents(item.FolderID, item.Name);
 					currentFolderID = item.FolderID;
 					currentFolderName = item.Name;
+					updateBreadcrumb();
 				} else
 				{
 					window.open(`http://127.0.0.1:8000${ item.URL }`, '_blank');
@@ -109,21 +138,54 @@ export async function loadFolderContents(folderId, folderName)
 	}
 }
 
-export function updateBreadcrumb(folderName)
+export function updateBreadcrumb()
 {
 	const breadcrumbNav = document.querySelector("#breadcrumb .nav-wrapper");
-	const breadcrumbLinks = breadcrumbNav.querySelectorAll(".breadcrumb");
+	breadcrumbNav.innerHTML = ''; // Clear existing breadcrumbs
 
-	for (let i = breadcrumbLinks.length - 1; i > 0; i--)
+	// Add root breadcrumb
+	const rootBreadcrumb = document.createElement("p");
+	// rootBreadcrumb.href = "#!";
+	rootBreadcrumb.textContent = "Root";
+	rootBreadcrumb.className = "breadcrumb";
+	rootBreadcrumb.onclick = () =>
 	{
-		breadcrumbLinks[i].remove();
-	}
+		loadFolderContents("0", "Root");
+		currentFolderID = "0";
+		currentFolderName = "Root";
+		folderHistory = [];
+		return false;
+	};
+	breadcrumbNav.appendChild(rootBreadcrumb);
 
-	const breadcrumbLink = document.createElement("a");
-	breadcrumbLink.href = "#!";
-	breadcrumbLink.textContent = folderName;
-	breadcrumbLink.className = "breadcrumb";
-	breadcrumbNav.appendChild(breadcrumbLink);
+	// Add breadcrumbs for each folder in history
+	folderHistory.forEach((folder, index) =>
+	{
+		const breadcrumbLink = document.createElement("p");
+		// breadcrumbLink.href = "#!";
+		breadcrumbLink.textContent = folder.name;
+		breadcrumbLink.className = "breadcrumb";
+		breadcrumbLink.onclick = () =>
+		{
+			loadFolderContents(folder.id, folder.name);
+			currentFolderID = folder.id;
+			currentFolderName = folder.name;
+			folderHistory = folderHistory.slice(0, index); // Remove folders after this one
+			updateBreadcrumb();
+			return false;
+		};
+		breadcrumbNav.appendChild(breadcrumbLink);
+	});
+
+	// Add current folder to breadcrumb
+	if (currentFolderID !== "0")
+	{
+		const currentBreadcrumb = document.createElement("p");
+		// currentBreadcrumb.href = "#!";
+		currentBreadcrumb.textContent = currentFolderName;
+		currentBreadcrumb.className = "breadcrumb";
+		breadcrumbNav.appendChild(currentBreadcrumb);
+	}
 }
 
 export const addFolderModal = document.getElementById('addFolderModal');
@@ -198,7 +260,7 @@ export async function handleDeleteFolder(folderId)
 	}
 }
 
-async function handleDelete(id, type)
+export async function handleDelete(id, type)
 {
 	if (type === 'folder')
 	{
