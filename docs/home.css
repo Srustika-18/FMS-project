@@ -101,9 +101,8 @@ header a:hover
 
 .reviews-container
 {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     color: #fff;
 }
 
@@ -113,7 +112,6 @@ header a:hover
     padding: 20px;
     margin: 10px;
     border-radius: 10px;
-    width: 300px;
     box-sizing: border-box;
 }
 
