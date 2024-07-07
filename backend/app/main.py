@@ -20,4 +20,4 @@ app.include_router(file.router)
 app.include_router(folder.router)
 
 app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")
-app.mount("/", StaticFiles(directory="C:/Users/kalinga/Downloads/Mine/All Codes/FMS-project/docs", html=True), name="uploads")
+app.mount("/", StaticFiles(directory="../docs", html=True), name="uploads")
