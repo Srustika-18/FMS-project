@@ -6,7 +6,7 @@ const folderTableBody = document.querySelector("#folder-table tbody");
 // let currentUsername = localStorage.getItem('currentUsername');
 
 let currentFolderID = "0";
-let currentFolderName = "";
+let currentFolderName = "Root";
 let folderHistory = [];
 
 export function getCurrentFolderID()
@@ -19,6 +19,13 @@ export function getCurrentFolderName()
 	return currentFolderName;
 }
 
+function logDetails()
+{
+	console.log("🚀 ~ currentFolderID:", currentFolderID)
+	console.log("🚀 ~ currentFolderName:", currentFolderName)
+	console.log("🚀 ~ folderHistory:", folderHistory)
+
+}
 
 export async function loadRootFolders()
 {
@@ -37,7 +44,7 @@ export async function loadRootFolders()
 				loadFolderContents(folder.FolderID, folder.Name);
 				currentFolderID = folder.FolderID;
 				currentFolderName = folder.Name;
-				folderHistory = []; // Clear history when at root
+				folderHistory = [{ id: "0", name: "Root" }]; // Clear history when at root
 				updateBreadcrumb();
 				return false;
 			};
@@ -144,19 +151,19 @@ export function updateBreadcrumb()
 	breadcrumbNav.innerHTML = ''; // Clear existing breadcrumbs
 
 	// Add root breadcrumb
-	const rootBreadcrumb = document.createElement("p");
-	// rootBreadcrumb.href = "#!";
-	rootBreadcrumb.textContent = "Root";
-	rootBreadcrumb.className = "breadcrumb";
-	rootBreadcrumb.onclick = () =>
-	{
-		loadFolderContents("0", "Root");
-		currentFolderID = "0";
-		currentFolderName = "Root";
-		folderHistory = [];
-		return false;
-	};
-	breadcrumbNav.appendChild(rootBreadcrumb);
+	// const rootBreadcrumb = document.createElement("p");
+	// // rootBreadcrumb.href = "#!";
+	// rootBreadcrumb.textContent = "Root";
+	// rootBreadcrumb.className = "breadcrumb";
+	// rootBreadcrumb.onclick = () =>
+	// {
+	// 	loadFolderContents("0", "Root");
+	// 	currentFolderID = "0";
+	// 	currentFolderName = "Root";
+	// 	folderHistory = [];
+	// 	return false;
+	// };
+	// breadcrumbNav.appendChild(rootBreadcrumb);
 
 	// Add breadcrumbs for each folder in history
 	folderHistory.forEach((folder, index) =>
@@ -253,7 +260,8 @@ export async function handleDeleteFolder(folderId)
 		}
 
 		alert('Folder deleted successfully');
-		await loadFolderContents(currentFolderID, currentFolderName);
+		await loadRootFolders();
+		// await loadFolderContents(currentFolderID, currentFolderName);
 	} catch (error)
 	{
 		alert('Folder deletion failed: ' + error.message + '\nTry logging out then logging in.');

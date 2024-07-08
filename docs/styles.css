@@ -137,6 +137,11 @@ header a:hover
 	padding: 0.5rem;
 }
 
+.nav-wrapper
+{
+	min-height: 2rem;
+}
+
 .nav-wrapper p:not(:first-child):before
 {
 	content: " > ";
