@@ -182,7 +182,8 @@ td
 	background-color: color-mix(in lab, var(--accent-color) 80%, transparent);
 }
 
-td:nth-child(1)
+td:nth-child(1),
+td:nth-child(3)
 {
 	width: 30%;
 }

@@ -135,8 +135,12 @@ export async function loadFolderContents(folderId, folderName)
 				};
 				actionsCell.appendChild(deleteButton);
 			}
-
 			row.appendChild(actionsCell);
+
+			const dateCell = document.createElement("td");
+			dateCell.textContent = convertToDateFormat(item.CreatedAt);
+			row.appendChild(dateCell);
+
 			folderTableBody.appendChild(row);
 		});
 	} catch (error)
@@ -277,4 +281,18 @@ export async function handleDelete(id, type)
 	{
 		await handleDeleteFile(id);
 	}
+}
+
+function convertToDateFormat(inputDateString)
+{
+	// Create a Date object
+	const date = new Date(inputDateString);
+
+	// Extract day, month, year, and formatted time
+	const day = date.getUTCDate();
+	const month = date.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+	const year = date.getUTCFullYear().toString().slice(-2);
+	const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
+	const formattedDate = `${ day } ${ month } '${ year } at ${ time }`;
+	return formattedDate;
 }
