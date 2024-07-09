@@ -173,8 +173,8 @@ export async function loadFolderContents(folderId, folderName)
 
 			folderTableBody.appendChild(row);
 
-			highlightCurrentFolder();
 		});
+		highlightCurrentFolder();
 	} catch (error)
 	{
 		console.log("🚀 ~ error:", error)
