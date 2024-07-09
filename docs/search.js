@@ -1,6 +1,5 @@
-// search.js
-
 import { loadFolderContents, handleDelete, setCurrentFolderID, setCurrentFolderName } from './folder.js';
+import { convertToDateFormat } from "./utils.js";
 
 const updateDebounceText = debounce(async (text) =>
 {
@@ -26,8 +25,6 @@ function debounce(cb, delay = 1000)
 	};
 }
 
-
-// Main functions for search
 export async function searchFoldersAndFiles(query)
 {
 	try
@@ -47,7 +44,7 @@ export async function searchFoldersAndFiles(query)
 		{
 			const row = document.createElement("tr");
 			const nameCell = document.createElement("td");
-			nameCell.textContent = item.Name;
+			nameCell.textContent = `${ item.Name } (${ item.Path })`;
 			row.appendChild(nameCell);
 
 			const actionsCell = document.createElement("td");
@@ -86,7 +83,8 @@ export async function searchFoldersAndFiles(query)
 		{
 			const row = document.createElement("tr");
 			const nameCell = document.createElement("td");
-			nameCell.textContent = item.Name;
+			nameCell.textContent = `${ item.Name } (${ item.Path })`; // Display the full file path
+			console.log("🚀 ~ searchResults.data[0].files.forEach ~ item:", item)
 			row.appendChild(nameCell);
 
 			const actionsCell = document.createElement("td");
@@ -114,8 +112,12 @@ export async function searchFoldersAndFiles(query)
 				};
 				actionsCell.appendChild(deleteButton);
 			}
-
 			row.appendChild(actionsCell);
+
+			const dateCell = document.createElement("td");
+			dateCell.textContent = convertToDateFormat(item.CreatedAt);
+			row.appendChild(dateCell);
+
 			folderTableBody.appendChild(row);
 		});
 	} catch (error)

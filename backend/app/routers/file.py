@@ -1,9 +1,7 @@
-# app/routers/files.py
-
 import shutil
 from fastapi import APIRouter, Depends, UploadFile, File as FastAPIFile, HTTPException
 from app.schemas import ResponseModel, User
-from app.crud import add_file, delete_file, retrieve_files_by_folder_id
+from app.crud import add_file, delete_file, get_full_folder_path, retrieve_files_by_folder_id
 from app.dependencies import get_current_admin
 
 router = APIRouter(
@@ -14,14 +12,16 @@ router = APIRouter(
 
 @router.post("/", response_description="File data added into the database")
 async def upload_file(folder_id: str, file: UploadFile = FastAPIFile(...), current_admin: User = Depends(get_current_admin)):
-    print(folder_id)
-    print(file)
     if not current_admin:
         raise HTTPException(status_code=401, detail="Unauthorized")
+
+    folder_path = await get_full_folder_path(folder_id)
+    file_path = f"{folder_path}/{file.filename}" if folder_path else file.filename
 
     file_data = {
         "Name": file.filename,
         "FolderID": folder_id,
+        "Path": file_path,  # Store the full file path
         "URL": f"/uploads/{file.filename}",
         "OwnerID": dict(current_admin)["username"]
     }

@@ -177,6 +177,7 @@ export async function loadFolderContents(folderId, folderName)
 		});
 	} catch (error)
 	{
+		console.log("🚀 ~ error:", error)
 		alert("Error loading folder contents: " + error.message);
 	}
 }
@@ -222,7 +223,8 @@ export async function handleAddFolder(e)
 		}
 
 		hideAddFolderModal();
-		await loadFolderContents(currentFolderID, currentFolderName);
+		await loadRootFolders();
+		// await loadFolderContents(currentFolderID, currentFolderName);
 	} catch (error)
 	{
 		alert(
