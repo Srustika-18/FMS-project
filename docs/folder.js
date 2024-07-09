@@ -1,4 +1,6 @@
-import { handleDeleteFile } from './file.js'
+import { handleDeleteFile } from "./file.js";
+import { updateBreadcrumb } from "./ui.js";
+import { convertToDateFormat } from "./utils.js";
 
 const sidenav = document.getElementById("sidenav");
 const folderTableBody = document.querySelector("#folder-table tbody");
@@ -13,18 +15,34 @@ export function getCurrentFolderID()
 {
 	return currentFolderID;
 }
+export function setCurrentFolderID(folderID)
+{
+	currentFolderID = folderID;
+}
 
 export function getCurrentFolderName()
 {
 	return currentFolderName;
 }
+export function setCurrentFolderName(folderName)
+{
+	currentFolderName = folderName;
+}
+
+export function getCurrentFolderHistory()
+{
+	return folderHistory;
+}
+export function setCurrentFolderHistory(history)
+{
+	folderHistory = history;
+}
 
 function logDetails()
 {
-	console.log("🚀 ~ currentFolderID:", currentFolderID)
-	console.log("🚀 ~ currentFolderName:", currentFolderName)
-	console.log("🚀 ~ folderHistory:", folderHistory)
-
+	console.log("🚀 ~ currentFolderID:", currentFolderID);
+	console.log("🚀 ~ currentFolderName:", currentFolderName);
+	console.log("🚀 ~ folderHistory:", folderHistory);
 }
 
 export async function loadRootFolders()
@@ -33,12 +51,13 @@ export async function loadRootFolders()
 	{
 		const response = await fetch("http://127.0.0.1:8000/folders/0");
 		const rootFolders = await response.json();
-		sidenav.innerHTML = '';
+		sidenav.innerHTML = "";
 		rootFolders.data[0].forEach((folder) =>
 		{
 			const folderLink = document.createElement("button");
 			folderLink.textContent = folder.Name;
-			folderLink.className = "collection-item";
+			folderLink.className = "sidenav-buttons";
+			folderLink.setAttribute("data-folder-id", folder.FolderID);
 			folderLink.onclick = () =>
 			{
 				loadFolderContents(folder.FolderID, folder.Name);
@@ -58,14 +77,15 @@ export async function loadRootFolders()
 	}
 }
 
-
 export async function loadFolderContents(folderId, folderName)
 {
 	try
 	{
-		const response = await fetch(`http://127.0.0.1:8000/folders/${ folderId }`);
+		const response = await fetch(
+			`http://127.0.0.1:8000/folders/${ folderId }`
+		);
 		const folderContents = await response.json();
-		folderTableBody.innerHTML = '';
+		folderTableBody.innerHTML = "";
 
 		updateBreadcrumb();
 
@@ -74,7 +94,7 @@ export async function loadFolderContents(folderId, folderName)
 		{
 			const parentRow = document.createElement("tr");
 			const parentCell = document.createElement("td");
-			parentCell.colSpan = 2;
+			parentCell.colSpan = 3;
 
 			const parentButton = document.createElement("button");
 			parentButton.textContent = "Go to Parent Folder";
@@ -116,22 +136,32 @@ export async function loadFolderContents(folderId, folderName)
 					updateBreadcrumb();
 				} else
 				{
-					window.open(`http://127.0.0.1:8000${ item.URL }`, '_blank');
+					window.open(`http://127.0.0.1:8000${ item.URL }`, "_blank");
 				}
 				return false;
 			};
 			actionsCell.appendChild(openLink);
 
-			if (localStorage.getItem('authToken'))
-			{  // Only show delete button if the user is authenticated
+			if (localStorage.getItem("authToken"))
+			{
+				// Only show delete button if the user is authenticated
 				const deleteButton = document.createElement("button");
 				deleteButton.textContent = "Delete";
 				deleteButton.className = "btn-small delete-btn";
-				deleteButton.setAttribute('data-id', item.FolderID || item.FileID);
-				deleteButton.setAttribute('data-type', item.ParentfolderID !== undefined ? 'folder' : 'file');
+				deleteButton.setAttribute(
+					"data-id",
+					item.FolderID || item.FileID
+				);
+				deleteButton.setAttribute(
+					"data-type",
+					item.ParentfolderID !== undefined ? "folder" : "file"
+				);
 				deleteButton.onclick = async () =>
 				{
-					await handleDelete(item.FileID || item.FolderID, item.ParentfolderID !== undefined ? 'folder' : 'file');
+					await handleDelete(
+						item.FileID || item.FolderID,
+						item.ParentfolderID !== undefined ? "folder" : "file"
+					);
 				};
 				actionsCell.appendChild(deleteButton);
 			}
@@ -142,64 +172,16 @@ export async function loadFolderContents(folderId, folderName)
 			row.appendChild(dateCell);
 
 			folderTableBody.appendChild(row);
+
+			highlightCurrentFolder();
 		});
 	} catch (error)
 	{
-		alert('Error loading folder contents: ' + error.message);
+		alert("Error loading folder contents: " + error.message);
 	}
 }
 
-export function updateBreadcrumb()
-{
-	const breadcrumbNav = document.querySelector("#breadcrumb .nav-wrapper");
-	breadcrumbNav.innerHTML = ''; // Clear existing breadcrumbs
-
-	// Add root breadcrumb
-	// const rootBreadcrumb = document.createElement("p");
-	// // rootBreadcrumb.href = "#!";
-	// rootBreadcrumb.textContent = "Root";
-	// rootBreadcrumb.className = "breadcrumb";
-	// rootBreadcrumb.onclick = () =>
-	// {
-	// 	loadFolderContents("0", "Root");
-	// 	currentFolderID = "0";
-	// 	currentFolderName = "Root";
-	// 	folderHistory = [];
-	// 	return false;
-	// };
-	// breadcrumbNav.appendChild(rootBreadcrumb);
-
-	// Add breadcrumbs for each folder in history
-	folderHistory.forEach((folder, index) =>
-	{
-		const breadcrumbLink = document.createElement("p");
-		// breadcrumbLink.href = "#!";
-		breadcrumbLink.textContent = folder.name;
-		breadcrumbLink.className = "breadcrumb";
-		breadcrumbLink.onclick = () =>
-		{
-			loadFolderContents(folder.id, folder.name);
-			currentFolderID = folder.id;
-			currentFolderName = folder.name;
-			folderHistory = folderHistory.slice(0, index); // Remove folders after this one
-			updateBreadcrumb();
-			return false;
-		};
-		breadcrumbNav.appendChild(breadcrumbLink);
-	});
-
-	// Add current folder to breadcrumb
-	if (currentFolderID !== "0")
-	{
-		const currentBreadcrumb = document.createElement("p");
-		// currentBreadcrumb.href = "#!";
-		currentBreadcrumb.textContent = currentFolderName;
-		currentBreadcrumb.className = "breadcrumb";
-		breadcrumbNav.appendChild(currentBreadcrumb);
-	}
-}
-
-export const addFolderModal = document.getElementById('addFolderModal');
+export const addFolderModal = document.getElementById("addFolderModal");
 
 export function showAddFolderModal()
 {
@@ -209,41 +191,45 @@ export function showAddFolderModal()
 export function hideAddFolderModal()
 {
 	addFolderModal.close();
-	document.getElementById('newFolderName').value = "";
+	document.getElementById("newFolderName").value = "";
 }
 
 export async function handleAddFolder(e)
 {
 	e.preventDefault();
-	const folderName = document.getElementById('newFolderName').value;
+	const folderName = document.getElementById("newFolderName").value;
 	const parentFolderID = currentFolderID;
-	const ownerID = localStorage.getItem('currentUsername');
+	const ownerID = localStorage.getItem("currentUsername");
 
 	try
 	{
-		const response = await fetch('http://localhost:8000/folders/', {
-			method: 'POST',
+		const response = await fetch("http://localhost:8000/folders/", {
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${ localStorage.getItem('authToken') }`,
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${ localStorage.getItem("authToken") }`,
 			},
 			body: JSON.stringify({
 				Name: folderName,
 				ParentfolderID: parentFolderID,
-				OwnerID: ownerID
-			})
+				OwnerID: ownerID,
+			}),
 		});
 
 		if (!response.ok)
 		{
-			throw new Error('Folder creation failed');
+			throw new Error("Folder creation failed");
 		}
 
 		hideAddFolderModal();
 		await loadFolderContents(currentFolderID, currentFolderName);
 	} catch (error)
 	{
-		alert('Folder creation failed: ' + error.message + '\nTry logging out then logging in.');
+		alert(
+			"Folder creation failed: " +
+			error.message +
+			"\nTry logging out then logging in."
+		);
 	}
 }
 
@@ -251,48 +237,59 @@ export async function handleDeleteFolder(folderId)
 {
 	try
 	{
-		const response = await fetch(`http://127.0.0.1:8000/folders/${ folderId }`, {
-			method: 'DELETE',
-			headers: {
-				'Authorization': `Bearer ${ localStorage.getItem('authToken') }`,
-			},
-		});
+		const response = await fetch(
+			`http://127.0.0.1:8000/folders/${ folderId }`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${ localStorage.getItem(
+						"authToken"
+					) }`,
+				},
+			}
+		);
 
 		if (!response.ok)
 		{
-			throw new Error('Folder deletion failed');
+			throw new Error("Folder deletion failed");
 		}
 
-		alert('Folder deleted successfully');
+		alert("Folder deleted successfully");
 		await loadRootFolders();
 		// await loadFolderContents(currentFolderID, currentFolderName);
 	} catch (error)
 	{
-		alert('Folder deletion failed: ' + error.message + '\nTry logging out then logging in.');
+		alert(
+			"Folder deletion failed: " +
+			error.message +
+			"\nTry logging out then logging in."
+		);
 	}
 }
 
 export async function handleDelete(id, type)
 {
-	if (type === 'folder')
+	if (type === "folder")
 	{
 		await handleDeleteFolder(id);
-	} else if (type === 'file')
+	} else if (type === "file")
 	{
 		await handleDeleteFile(id);
 	}
 }
 
-function convertToDateFormat(inputDateString)
+function highlightCurrentFolder()
 {
-	// Create a Date object
-	const date = new Date(inputDateString);
-
-	// Extract day, month, year, and formatted time
-	const day = date.getUTCDate();
-	const month = date.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
-	const year = date.getUTCFullYear().toString().slice(-2);
-	const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: 'UTC' });
-	const formattedDate = `${ day } ${ month } '${ year } at ${ time }`;
-	return formattedDate;
+	const folderLinks = sidenav.querySelectorAll(".sidenav-buttons");
+	folderLinks.forEach((link) =>
+	{
+		link.classList.remove("folder-active");
+		if (
+			link.getAttribute("data-folder-id") == currentFolderID ||
+			link.getAttribute("data-folder-id") == folderHistory?.[1]?.id
+		)
+		{
+			link.classList.add("folder-active");
+		}
+	});
 }

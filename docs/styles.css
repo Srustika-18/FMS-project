@@ -86,7 +86,7 @@ header a:hover
 	justify-content: center;
 }
 
-.sidenav button
+.sidenav-buttons
 {
 	border: none;
 	cursor: pointer;
@@ -97,7 +97,9 @@ header a:hover
 	text-align: center;
 }
 
-.sidenav button:hover
+.folder-active
+
+/* .sidenav button:hover */
 {
 	background-color: var(--accent-color);
 	color: var(--secondary-text-color);

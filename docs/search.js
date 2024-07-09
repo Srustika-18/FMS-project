@@ -1,10 +1,9 @@
-import { loadRootFolders, loadFolderContents, handleDelete } from './folder.js';
+// search.js
+
+import { loadFolderContents, handleDelete, setCurrentFolderID, setCurrentFolderName } from './folder.js';
 
 const updateDebounceText = debounce(async (text) =>
 {
-	// Main Function Here
-	// document.querySelector(".search-side>h3").textContent = text
-	// Fetch search results from the server
 	await searchFoldersAndFiles(text);
 });
 
@@ -28,7 +27,7 @@ function debounce(cb, delay = 1000)
 }
 
 
-// New functions for search
+// Main functions for search
 export async function searchFoldersAndFiles(query)
 {
 	try
@@ -59,8 +58,8 @@ export async function searchFoldersAndFiles(query)
 			openLink.onclick = () =>
 			{
 				loadFolderContents(item.FolderID, item.Name);
-				currentFolderID = item.FolderID;
-				currentFolderName = item.Name;
+				setCurrentFolderID(item.FolderID);
+				setCurrentFolderName(item.Name);
 				return false;
 			};
 			actionsCell.appendChild(openLink);
