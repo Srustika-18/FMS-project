@@ -2,49 +2,22 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<link
-			rel="icon"
-			type="image/webp"
-			href="images/railway.png"
-		/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/webp" href="images/railway.png" />
 		<title>East Coast Railway</title>
-		<meta
-			name="theme-color"
-			content="#a365ed"
-		/>
-		<link
-			rel="stylesheet"
-			href="reset.css"
-		/>
-		<link
-			rel="stylesheet"
-			href="styles.css"
-		/>
-		<script
-			defer
-			type="module"
-			src="script.js"
-		></script>
+		<meta name="theme-color" content="#a365ed" />
+		<link rel="stylesheet" href="reset.css" />
+		<link rel="stylesheet" href="styles.css" />
+		<script defer type="module" src="script.js"></script>
 	</head>
 	<body>
 		<!-- Login Modal -->
 		<dialog id="loginModal">
-			<form
-				id="loginModalContent"
-				method="post"
-			>
+			<form id="loginModalContent" method="post">
 				<button id="closeModal">&times;</button>
 				<h2>Login</h2>
 				<div class="input-box">
-					<input
-						type="text"
-						id="username"
-						placeholder="Username"
-					/>
+					<input type="text" id="username" placeholder="Username" />
 				</div>
 				<div class="input-box">
 					<input
@@ -53,11 +26,7 @@
 						placeholder="Password"
 					/>
 				</div>
-				<button
-					type="submit"
-					id="submitLogin"
-					class="btn-small"
-				>
+				<button type="submit" id="submitLogin" class="btn-small">
 					Login
 				</button>
 			</form>
@@ -75,15 +44,33 @@
 					placeholder="Enter folder name"
 					required
 				/>
-				<button
-					type="submit"
-					class="btn-small"
-				>
-					Create Folder
-				</button>
+				<button type="submit" class="btn-small">Create Folder</button>
 				<button
 					type="button"
 					id="closeAddFolderModal"
+					class="btn-small"
+				>
+					Cancel
+				</button>
+			</form>
+		</dialog>
+
+		<!-- Upload Folder Modal 2 -->
+		<dialog id="addRootFolderModal">
+			<form id="addRootFolderModalContent">
+				<h2>Create New Folder</h2>
+				<label for="newRootFolderName">Folder Name:</label>
+				<input
+					type="text"
+					id="newRootFolderName"
+					name="newRootFolderName"
+					placeholder="Enter folder name"
+					required
+				/>
+				<button type="submit" class="btn-small">Create Folder</button>
+				<button
+					type="button"
+					id="closeAddRootFolderModal"
 					class="btn-small"
 				>
 					Cancel
@@ -103,17 +90,8 @@
 					accept=".pdf,.doc,.docx,.txt"
 					required
 				/>
-				<button
-					type="submit"
-					class="btn-small"
-				>
-					Upload File
-				</button>
-				<button
-					type="button"
-					id="closeAddFileModal"
-					class="btn-small"
-				>
+				<button type="submit" class="btn-small">Upload File</button>
+				<button type="button" id="closeAddFileModal" class="btn-small">
 					Close
 				</button>
 			</form>
@@ -121,30 +99,19 @@
 
 		<header>
 			<div class="fst">
-				<img
-					src="images/railway.png"
-					alt="icon"
-				/>
+				<img src="images/railway.png" alt="icon" />
 				<h1>East Coast Railway</h1>
 			</div>
 			<nav>
 				<a href="home.html">Home</a>
 				<a href="#">Categories</a>
 				<a href="aboutus.html">About us</a>
-				<button
-					class="btn-small"
-					id="loginButton"
-				>
-					Log In
-				</button>
+				<button class="btn-small" id="loginButton">Log In</button>
 			</nav>
 		</header>
 
 		<div class="container">
-			<div
-				class="sidenav"
-				id="sidenav"
-			>
+			<div class="sidenav" id="sidenav">
 				<!-- Sidebar for root-level directories -->
 			</div>
 			<div class="main-content">
@@ -152,10 +119,7 @@
 					<div class="heading-side">
 						<h1>Folder Contents</h1>
 						<!-- Breadcrumb -->
-						<div
-							id="breadcrumb"
-							class="hide-on-small-and-down"
-						>
+						<div id="breadcrumb" class="hide-on-small-and-down">
 							<div class="nav-wrapper"></div>
 						</div>
 					</div>
@@ -171,23 +135,14 @@
 					</div>
 				</div>
 				<div class="btn-container">
-					<button
-						id="addFolderButton"
-						class="btn-small"
-					>
+					<button id="addFolderButton" class="btn-small">
 						Add Folder
 					</button>
-					<button
-						id="addFileButton"
-						class="btn-small"
-					>
+					<button id="addFileButton" class="btn-small">
 						Upload File
 					</button>
 				</div>
-				<table
-					class="highlight responsive-table"
-					id="folder-table"
-				>
+				<table class="highlight responsive-table" id="folder-table">
 					<thead>
 						<tr>
 							<th>Name</th>
