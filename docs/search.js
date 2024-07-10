@@ -74,8 +74,12 @@ export async function searchFoldersAndFiles(query)
 				};
 				actionsCell.appendChild(deleteButton);
 			}
-
 			row.appendChild(actionsCell);
+
+			const dateCell = document.createElement("td");
+			dateCell.textContent = convertToDateFormat(item.CreatedAt);
+			row.appendChild(dateCell);
+			
 			folderTableBody.appendChild(row);
 		});
 
