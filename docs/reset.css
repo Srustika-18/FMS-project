@@ -11,6 +11,10 @@
 	--navbar-height: 6rem;
 	--side-margin: 2rem;
 }
+html
+{
+	scrollbar-gutter: stable;
+}
 
 body
 {

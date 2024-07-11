@@ -1,5 +1,6 @@
 import { handleDeleteFile } from "./file.js";
 import { updateBreadcrumb } from "./ui.js";
+import { setCurrentview } from "./script.js";
 import { convertToDateFormat } from "./utils.js";
 
 const sidenav = document.getElementById("sidenav");
@@ -49,6 +50,7 @@ export async function loadRootFolders() {
 			folderLink.className = "sidenav-buttons";
 			folderLink.setAttribute("data-folder-id", folder.FolderID);
 			folderLink.onclick = () => {
+				setCurrentview("folder");
 				loadFolderContents(folder.FolderID, folder.Name);
 				currentFolderID = folder.FolderID;
 				currentFolderName = folder.Name;

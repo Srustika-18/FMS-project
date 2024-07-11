@@ -16,7 +16,7 @@ export async function fetchNotices() {
 
 export function renderNotices(noticeData) {
 	const noticeContainer = document.querySelector(".notice-container");
-	noticeContainer.innerHTML = ""; // Clear existing notices
+	// noticeContainer.innerHTML = ""; // Clear existing notices
 	const notices = noticeData?.data?.[0];
 	notices.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
 
