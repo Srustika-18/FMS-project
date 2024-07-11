@@ -35,6 +35,7 @@ def File_helper(File) -> dict:
         "Name": File["Name"],
         "FolderID": File["FolderID"],
         "Path": File["Path"],
+        "Description": File["Description"],
         "URL": File["URL"],
         "CreatedAt": File["CreatedAt"],
         "UpdatedAt": File["UpdatedAt"],
@@ -172,3 +173,16 @@ async def get_full_folder_path(folder_id: str) -> str:
         parent_folder_path = await get_full_folder_path(folder["ParentfolderID"])
         return f"{parent_folder_path}/{folder['Name']}"
     return ""
+
+
+async def retrieve_notices():
+    notices_list = []
+    async for notice in files.find({}, {"Name": 1, "Description": 1, "OwnerID": 1, "CreatedAt": 1, "URL": 1}):
+        notices_list.append({
+            "Name": notice["Name"],
+            "Description": notice["Description"],
+            "OwnerID": notice["OwnerID"],
+            "CreatedAt": notice["CreatedAt"],
+            "URL": notice["URL"]
+        })
+    return notices_list

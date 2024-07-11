@@ -108,7 +108,11 @@ export async function loadFolderContents(folderId, folderName) {
 		folderContents.data[0].forEach((item) => {
 			const row = document.createElement("tr");
 			const nameCell = document.createElement("td");
-			nameCell.textContent = item.Name;
+			nameCell.innerHTML = `${item.Name} ${
+				item?.Description
+					? ` <br> <p class="description"> (${item?.Description}) </p>`
+					: ""
+			}`;
 			row.appendChild(nameCell);
 
 			const actionsCell = document.createElement("td");

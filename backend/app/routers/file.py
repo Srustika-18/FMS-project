@@ -1,7 +1,7 @@
 import shutil
 from fastapi import APIRouter, Depends, UploadFile, File as FastAPIFile, HTTPException
 from app.schemas import ResponseModel, User
-from app.crud import add_file, delete_file, get_full_folder_path, retrieve_files_by_folder_id
+from app.crud import add_file, delete_file, get_full_folder_path, retrieve_files_by_folder_id, retrieve_notices
 from app.dependencies import get_current_admin
 
 router = APIRouter(
@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.post("/", response_description="File data added into the database")
-async def upload_file(folder_id: str, file: UploadFile = FastAPIFile(...), current_admin: User = Depends(get_current_admin)):
+async def upload_file(folder_id: str, description: str, file: UploadFile = FastAPIFile(...),  current_admin: User = Depends(get_current_admin)):
     if not current_admin:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
@@ -22,6 +22,7 @@ async def upload_file(folder_id: str, file: UploadFile = FastAPIFile(...), curre
         "Name": file.filename,
         "FolderID": folder_id,
         "Path": file_path,  # Store the full file path
+        "Description": description,  # Store the full file path
         "URL": f"/uploads/{file.filename}",
         "OwnerID": dict(current_admin)["username"]
     }
@@ -53,3 +54,12 @@ async def delete_file_by_id(file_id: str, current_admin: User = Depends(get_curr
         raise HTTPException(
             status_code=500, detail=f"Error deleting file: {error_message}")
     return ResponseModel(file, f"No file found with id {file_id}.")
+
+
+@router.get("/notices", response_description="Recent file notices retrieved")
+async def get_recent_file_notices():
+    notices = await retrieve_notices()
+
+    if not notices:
+        return ResponseModel(notices, "No notices found")
+    return ResponseModel(notices, "Recent file notices retrieved successfully")

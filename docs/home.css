@@ -140,3 +140,90 @@ header a:hover
     color: gold;
 }
 
+.notice-board
+{
+    padding-block: 2rem;
+    padding-inline: 2rem;
+}
+
+.notice-heading
+{
+    text-align: center;
+    color: #fff;
+    margin-block-end: 1rem;
+}
+
+.notice-container
+{
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 2fr 3fr auto auto auto;
+}
+
+.notice-card
+{
+    grid-column: span 5;
+    display: grid;
+    grid-template-columns: subgrid;
+    /* grid-template-areas:
+        "title date"
+        "description description"
+        "owner link"; */
+    align-items: center;
+    gap: 1rem;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.heading-card
+{
+    background: transparent;
+    border: none;
+    padding-block: 0;
+    color: #fff;
+}
+
+.notice-card h3
+{
+    /* grid-area: title; */
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.notice-card .created-at
+{
+    /* grid-area: date; */
+    text-align: right;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.notice-card .description
+{
+    /* grid-area: description; */
+    margin: 0;
+}
+
+.notice-card .owner
+{
+    /* grid-area: owner; */
+    margin: 0;
+    font-size: 0.9em;
+    color: #444;
+}
+
+.notice-card a
+{
+    /* grid-area: link; */
+    justify-self: end;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.notice-card a:hover
+{
+    text-decoration: underline;
+}

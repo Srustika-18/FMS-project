@@ -1,9 +1,7 @@
-// Assuming you have a function to convert date to a readable format
+// notices.js
 import { convertToDateFormat } from "./utils.js";
 
-const noticeContainer = document.querySelector(".notice-container");
-
-async function fetchNotices() {
+export async function fetchNotices() {
 	try {
 		const response = await fetch("http://127.0.0.1:8000/files/notices");
 		if (!response.ok) {
@@ -13,14 +11,13 @@ async function fetchNotices() {
 		renderNotices(notices);
 	} catch (error) {
 		console.error("Error fetching notices:", error);
-		// Optionally show an error message on the UI
 	}
 }
 
-function renderNotices(noticeData) {
-	// noticeContainer.innerHTML = ""; // Clear existing notices
+export function renderNotices(noticeData) {
+	const noticeContainer = document.querySelector(".notice-container");
+	noticeContainer.innerHTML = ""; // Clear existing notices
 	const notices = noticeData?.data?.[0];
-	// Sort notices by createdAt date in descending order
 	notices.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
 
 	notices.forEach((notice) => {
@@ -60,29 +57,3 @@ function createNoticeCard(notice) {
 
 	return card;
 }
-
-// Fetch notices when the page loads
-document.addEventListener("DOMContentLoaded", () => {
-	fetchNotices();
-});
-
-const reviewContainer = document.querySelector(".reviews-container");
-
-async function getReviews() {
-	const res = await fetch("https://randomuser.me/api/?results=8");
-	const data = await res.json();
-	// console.log(data);
-	for (const review of data.results) {
-		let randomNumber = Math.floor(Math.random() * 5);
-		reviewContainer.innerHTML += `<div class="review-card">
-						<img src="${review.picture.thumbnail}" alt="User" />
-						<h3>${review.name.first} ${review.name.last}</h3>
-						<div class="stars">${"★".repeat(randomNumber)}${"☆".repeat(
-			5 - randomNumber
-		)}</div>
-						<p>“Add review”</p>
-					</div>`;
-	}
-}
-
-getReviews();

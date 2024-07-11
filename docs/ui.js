@@ -59,3 +59,4 @@ export function updateBreadcrumb()
 		breadcrumbNav.appendChild(currentBreadcrumb);
 	}
 }
+
