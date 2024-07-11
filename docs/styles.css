@@ -5,10 +5,10 @@
 	--secondary-color: #0c0812;
 }
 
-*
+/* *
 {
-	/* outline: 1px solid green; */
-}
+	outline: 1px solid green;
+} */
 
 header
 {
@@ -52,6 +52,10 @@ header a:hover
 	align-items: center;
 	gap: 1em;
 	text-transform: uppercase;
+}
+.fst>h1
+{
+	font-family: "Cinzel";
 }
 
 .fst img
@@ -453,6 +457,7 @@ dialog>form input
 	top: 30%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	font-family: "Cinzel";
 	font-size: 3rem;
 	font-weight: bold;
 	white-space: nowrap;
