@@ -3,4 +3,4 @@ backend/app/__pycache__/
 backend/app/routers/__pycache__/
 backend/app/uploads/*
 !backend/app/uploads/policy.pdf
-
+backend/.env
