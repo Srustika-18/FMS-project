@@ -5,6 +5,7 @@ import {
 	getCurrentFolderName,
 	loadFolderContents,
 } from "./folder.js";
+import { url } from "./url.js";
 
 export const addFileModal = document.getElementById("addFileModal");
 
@@ -31,7 +32,7 @@ export async function handleAddFile(e) {
 
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:8000/files/?folder_id=${getCurrentFolderID()}&description=${description}`,
+			`${url}/files/?folder_id=${getCurrentFolderID()}&description=${description}`,
 			{
 				method: "POST",
 				headers: {
@@ -61,7 +62,7 @@ export async function handleAddFile(e) {
 
 export async function handleDeleteFile(fileId) {
 	try {
-		const response = await fetch(`http://127.0.0.1:8000/files/${fileId}`, {
+		const response = await fetch(`${url}/files/${fileId}`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",

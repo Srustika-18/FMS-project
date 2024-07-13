@@ -2,6 +2,7 @@ import { handleDeleteFile } from "./file.js";
 import { updateBreadcrumb } from "./ui.js";
 import { setCurrentview } from "./script.js";
 import { convertToDateFormat } from "./utils.js";
+import { url } from "./url.js";
 
 const sidenav = document.getElementById("sidenav");
 const folderTableBody = document.querySelector("#folder-table tbody");
@@ -41,7 +42,7 @@ function logDetails() {
 
 export async function loadRootFolders() {
 	try {
-		const response = await fetch("http://127.0.0.1:8000/folders/0");
+		const response = await fetch(`${url}/folders/0`);
 		const rootFolders = await response.json();
 		sidenav.innerHTML = "";
 		rootFolders.data[0].forEach((folder) => {
@@ -78,7 +79,7 @@ export async function loadRootFolders() {
 export async function loadFolderContents(folderId, folderName) {
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:8000/folders/${folderId}`
+			`${url}/folders/${folderId}`
 		);
 		const folderContents = await response.json();
 		folderTableBody.innerHTML = "";
@@ -130,7 +131,7 @@ export async function loadFolderContents(folderId, folderName) {
 					currentFolderName = item.Name;
 					updateBreadcrumb();
 				} else {
-					window.open(`http://127.0.0.1:8000${item.URL}`, "_blank");
+					window.open(`${url}${item.URL}`, "_blank");
 				}
 				return false;
 			};
@@ -269,7 +270,7 @@ export async function handleAddRootFolder(e) {
 export async function handleDeleteFolder(folderId) {
 	try {
 		const response = await fetch(
-			`http://127.0.0.1:8000/folders/${folderId}`,
+			`${url}/folders/${folderId}`,
 			{
 				method: "DELETE",
 				headers: {

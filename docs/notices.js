@@ -1,9 +1,10 @@
 // notices.js
 import { convertToDateFormat } from "./utils.js";
+import { url } from "./url.js";
 
 export async function fetchNotices() {
 	try {
-		const response = await fetch("http://127.0.0.1:8000/files/notices");
+		const response = await fetch(`${url}/files/notices`);
 		if (!response.ok) {
 			throw new Error("Failed to fetch notices");
 		}
