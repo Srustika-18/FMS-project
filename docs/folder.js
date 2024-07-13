@@ -1,6 +1,5 @@
 import { handleDeleteFile } from "./file.js";
-import { updateBreadcrumb } from "./ui.js";
-import { setCurrentview } from "./script.js";
+import { updateBreadcrumb, setCurrentview } from "./ui.js";
 import { convertToDateFormat } from "./utils.js";
 import { url } from "./url.js";
 
@@ -11,6 +10,8 @@ const folderTableBody = document.querySelector("#folder-table tbody");
 
 let currentFolderID = "0";
 let currentFolderName = "Root";
+let currentPage = 1;
+const itemsPerPage = 10;
 let folderHistory = [];
 
 export function getCurrentFolderID() {
@@ -76,17 +77,44 @@ export async function loadRootFolders() {
 	}
 }
 
+function renderPaginationControls(totalItems) {
+	const paginationContainer = document.querySelector(".pagination-container");
+	paginationContainer.innerHTML = "";
+
+	const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+	if (totalPages <= 1) return; // No need for pagination if there is only one page
+
+	for (let i = 1; i <= totalPages; i++) {
+		const pageButton = document.createElement("button");
+		pageButton.textContent = i;
+		pageButton.className = "pagination-button";
+		pageButton.onclick = () => {
+			currentPage = i;
+			loadFolderContents(currentFolderID, currentFolderName);
+		};
+		if (i === currentPage) {
+			pageButton.classList.add("active");
+		}
+		paginationContainer.appendChild(pageButton);
+	}
+}
+
 export async function loadFolderContents(folderId, folderName) {
 	try {
-		const response = await fetch(
-			`${url}/folders/${folderId}`
-		);
+		const response = await fetch(`${url}/folders/${folderId}`);
 		const folderContents = await response.json();
 		folderTableBody.innerHTML = "";
 
+		const items = folderContents.data[0];
+		const totalItems = items.length;
+		const startIndex = (currentPage - 1) * itemsPerPage;
+		const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+		const paginatedItems = items.slice(startIndex, endIndex);
+
 		updateBreadcrumb();
 
-		// Add "Parent Folder" button row if not at the root level
 		if (folderId !== "0" && folderHistory.length > 0) {
 			const parentRow = document.createElement("tr");
 			const parentCell = document.createElement("td");
@@ -101,6 +129,7 @@ export async function loadFolderContents(folderId, folderName) {
 				loadFolderContents(previousFolder.id, previousFolder.name);
 				currentFolderID = previousFolder.id;
 				currentFolderName = previousFolder.name;
+				currentPage = 1;
 				updateBreadcrumb();
 				return false;
 			};
@@ -108,7 +137,7 @@ export async function loadFolderContents(folderId, folderName) {
 			folderTableBody.appendChild(parentRow);
 		}
 
-		folderContents.data[0].forEach((item) => {
+		paginatedItems.forEach((item) => {
 			const row = document.createElement("tr");
 			const nameCell = document.createElement("td");
 			nameCell.innerHTML = `${item.Name} ${
@@ -125,7 +154,7 @@ export async function loadFolderContents(folderId, folderName) {
 			openLink.className = "btn-small";
 			openLink.onclick = () => {
 				if (item.ParentfolderID !== undefined) {
-					folderHistory.push({ id: folderId, name: folderName }); // Push current folder to history
+					folderHistory.push({ id: folderId, name: folderName });
 					loadFolderContents(item.FolderID, item.Name);
 					currentFolderID = item.FolderID;
 					currentFolderName = item.Name;
@@ -138,7 +167,6 @@ export async function loadFolderContents(folderId, folderName) {
 			actionsCell.appendChild(openLink);
 
 			if (localStorage.getItem("authToken")) {
-				// Only show delete button if the user is authenticated
 				const deleteButton = document.createElement("button");
 				deleteButton.textContent = "Delete";
 				deleteButton.className = "btn-small delete-btn";
@@ -166,7 +194,9 @@ export async function loadFolderContents(folderId, folderName) {
 
 			folderTableBody.appendChild(row);
 		});
+
 		highlightCurrentFolder();
+		renderPaginationControls(totalItems);
 	} catch (error) {
 		console.log("🚀 ~ error:", error);
 		alert("Error loading folder contents: " + error.message);
@@ -269,17 +299,12 @@ export async function handleAddRootFolder(e) {
 
 export async function handleDeleteFolder(folderId) {
 	try {
-		const response = await fetch(
-			`${url}/folders/${folderId}`,
-			{
-				method: "DELETE",
-				headers: {
-					Authorization: `Bearer ${localStorage.getItem(
-						"authToken"
-					)}`,
-				},
-			}
-		);
+		const response = await fetch(`${url}/folders/${folderId}`, {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+			},
+		});
 
 		if (!response.ok) {
 			throw new Error("Folder deletion failed");

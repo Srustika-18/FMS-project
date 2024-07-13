@@ -116,10 +116,17 @@ header a:hover
 
 .main-content
 {
-	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(images/home.webp);
+	--overlay-color: rgba(0, 0, 0, 0.5);
+	background: linear-gradient(var(--overlay-color), var(--overlay-color)), url(images/bg.jpg);
 	background-size: cover;
 	padding: 1rem;
 	color: var(--secondary-text-color);
+}
+
+.diff-bg
+{
+	background: linear-gradient(var(--overlay-color), var(--overlay-color)), url(images/home.webp);
+	background-size: cover;
 }
 
 .heading-container
@@ -330,9 +337,6 @@ dialog>form input
 	background-color: color-mix(in lab, red 80%, black);
 }
 
-
-
-
 .notice-board
 {
 	padding-block: 2rem;
@@ -475,4 +479,28 @@ dialog>form input
 	position: absolute;
 	inset: 0;
 	background-color: #00000055;
+}
+
+.pagination-container
+{
+	display: flex;
+	gap: 0.5rem;
+	justify-content: center;
+	margin-block-start: 1.5rem;
+	text-align: center;
+}
+
+.pagination-button
+{
+	padding: 0.25rem 0.5rem;
+	cursor: pointer;
+	border: none;
+	border-radius: 4px;
+}
+
+.pagination-button.active
+{
+	font-weight: bold;
+	background-color: var(--accent-color);
+	color: white;
 }
