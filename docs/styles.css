@@ -53,6 +53,7 @@ header a:hover
 	gap: 1em;
 	text-transform: uppercase;
 }
+
 .fst>h1
 {
 	font-family: "Cinzel";
@@ -434,12 +435,13 @@ dialog>form input
 	padding: 0.5rem 1rem;
 	border: none;
 	border-radius: 4px;
+	cursor: pointer;
 }
 
 .nav-btn:is(:hover, :focus-visible),
 .nav-hover
 {
-	background-color: #ffffff10;
+	background-color: #ffffff28;
 }
 
 .heading-image-container
@@ -473,5 +475,4 @@ dialog>form input
 	position: absolute;
 	inset: 0;
 	background-color: #00000055;
-
 }

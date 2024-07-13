@@ -91,6 +91,7 @@ export async function loadFolderContents(folderId, folderName) {
 			const parentRow = document.createElement("tr");
 			const parentCell = document.createElement("td");
 			parentCell.colSpan = 3;
+			parentRow.appendChild(parentCell);
 
 			const parentButton = document.createElement("button");
 			parentButton.textContent = "Back";
@@ -104,7 +105,6 @@ export async function loadFolderContents(folderId, folderName) {
 				return false;
 			};
 			parentCell.appendChild(parentButton);
-			parentRow.appendChild(parentCell);
 			folderTableBody.appendChild(parentRow);
 		}
 
