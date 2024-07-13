@@ -2,32 +2,47 @@
 import { convertToDateFormat } from "./utils.js";
 import { url } from "./url.js";
 
-export async function fetchNotices() {
-	try {
-		const response = await fetch(`${url}/files/notices`);
-		if (!response.ok) {
+export async function fetchNotices()
+{
+	try
+	{
+		const response = await fetch(`${ url }/files/notices`);
+		if (!response.ok)
+		{
 			throw new Error("Failed to fetch notices");
 		}
 		const notices = await response.json();
 		renderNotices(notices);
-	} catch (error) {
+	} catch (error)
+	{
 		console.error("Error fetching notices:", error);
 	}
 }
 
-export function renderNotices(noticeData) {
+const initialNoticeHTML = `<div class="notice-card heading-card">
+<h4>File Name</h4>
+<h4>Description</h4>
+<h4>Created At</h4>
+<h4>Owner</h4>
+<h4>File Link</h4>
+</div>`;
+
+export function renderNotices(noticeData)
+{
 	const noticeContainer = document.querySelector(".notice-container");
-	// noticeContainer.innerHTML = ""; // Clear existing notices
+	noticeContainer.innerHTML = initialNoticeHTML; // Clear existing notices
 	const notices = noticeData?.data?.[0];
 	notices.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
 
-	notices.forEach((notice) => {
+	notices.forEach((notice) =>
+	{
 		const noticeCard = createNoticeCard(notice);
 		noticeContainer.appendChild(noticeCard);
 	});
 }
 
-function createNoticeCard(notice) {
+function createNoticeCard(notice)
+{
 	const card = document.createElement("div");
 	card.classList.add("notice-card");
 
