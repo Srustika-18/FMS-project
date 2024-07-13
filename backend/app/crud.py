@@ -5,7 +5,11 @@ import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.schemas import PyObjectId
 
-client = AsyncIOMotorClient('mongodb://localhost:27017')
+
+db_url = os.environ.get("mongodburl")
+
+
+client = AsyncIOMotorClient(db_url)
 database = client.file_management_system
 folders = database.get_collection("Folders")
 files = database.get_collection("Files")
