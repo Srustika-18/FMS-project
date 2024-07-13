@@ -1,5 +1,6 @@
 import { loadFolderContents, handleDelete, setCurrentFolderID, setCurrentFolderName } from './folder.js';
 import { convertToDateFormat } from "./utils.js";
+import { url } from "./url.js";
 
 const updateDebounceText = debounce(async (text) =>
 {
@@ -29,7 +30,7 @@ export async function searchFoldersAndFiles(query)
 {
 	try
 	{
-		const response = await fetch(`http://127.0.0.1:8000/folders/search/?query=${ query }`);
+		const response = await fetch(`${url}/folders/search/?query=${ query }`);
 		const searchResults = await response.json();
 		const folderTableBody = document.querySelector("#folder-table tbody");
 		folderTableBody.innerHTML = '';
@@ -98,7 +99,7 @@ export async function searchFoldersAndFiles(query)
 			openLink.className = "btn-small";
 			openLink.onclick = () =>
 			{
-				window.open(`http://127.0.0.1:8000${ item.URL }`, '_blank');
+				window.open(`${url}${ item.URL }`, '_blank');
 				return false;
 			};
 			actionsCell.appendChild(openLink);
