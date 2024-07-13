@@ -93,7 +93,7 @@ export async function loadFolderContents(folderId, folderName) {
 			parentCell.colSpan = 3;
 
 			const parentButton = document.createElement("button");
-			parentButton.textContent = "Go to Parent Folder";
+			parentButton.textContent = "Back";
 			parentButton.className = "btn-small";
 			parentButton.onclick = () => {
 				const previousFolder = folderHistory.pop();
