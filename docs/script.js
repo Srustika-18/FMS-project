@@ -1,4 +1,5 @@
-import {
+import
+{
 	showLoginModal,
 	hideLoginModal,
 	handleLogin,
@@ -6,7 +7,8 @@ import {
 	handleLogout,
 } from "./auth.js";
 import { loadRootFolders, loadFolderContents, getCurrentFolderID, getCurrentFolderName } from "./folder.js";
-import {
+import
+{
 	showAddFolderModal,
 	hideAddFolderModal,
 	handleAddFolder,
@@ -17,10 +19,11 @@ import {
 } from "./folder.js";
 import { showAddFileModal, hideAddFileModal, handleAddFile } from "./file.js";
 import { searchText } from "./search.js";
-import { setCurrentview } from "./ui.js";
+import { setCurrentview, hideSectionsAfterLogin, showSectionsAfterLogout } from "./ui.js";
 import { fetchNotices } from "./notices.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async () =>
+{
 	const homeButton = document.getElementById("homeButton");
 	const directoryButton = document.getElementById("directoryButton");
 	const sectionsToHide = document.querySelectorAll('#faq, #aboutus, #tnc, #hc');
@@ -41,7 +44,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	await loadRootFolders();
 
-	if (authToken && currentUsername) {
+	if (authToken && currentUsername)
+	{
 		replaceLoginWithLogout();
 		await loadRootFolders();
 		document.getElementById("addFolderButton").style.display =
@@ -49,11 +53,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 		document.getElementById("addRootFolderButton").style.display =
 			"inline-block";
 		document.getElementById("addFileButton").style.display = "inline-block";
-	} else {
+		hideSectionsAfterLogin();
+	} else
+	{
 		document.getElementById("addFolderButton").style.display = "none";
 		document.getElementById("addRootFolderButton").style.display = "none";
 		document.getElementById("addFileButton").style.display = "none";
-		hideSectionsAfterLogin();
+		showSectionsAfterLogout();
 	}
 
 	document
@@ -85,9 +91,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 	document
 		.getElementById("addFileModalContent")
 		.addEventListener("submit", handleAddFile);
-	
+
 	const sortSelect = document.getElementById("sortSelect");
-	sortSelect.addEventListener("change", () => {
+	sortSelect.addEventListener("change", () =>
+	{
 		loadFolderContents(getCurrentFolderID(), getCurrentFolderName());
 	});
 
@@ -100,11 +107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // setCurrentview("folder");
 // export { setCurrentview };
-
-function hideSectionsAfterLogin() {
-	const sectionsToHide = document.querySelectorAll('#faq, #aboutus, #tnc, #hc');
-	sectionsToHide.forEach(section => section.style.display = 'none');
-}
 
 
 

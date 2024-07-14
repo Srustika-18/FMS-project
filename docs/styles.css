@@ -37,7 +37,7 @@ header a
 {
 	color: var(--secondary-text-color);
 	text-decoration: none;
-	font-size: 1.15rem;
+	/* font-size: 1.15rem; */
 }
 
 header a:hover
@@ -522,255 +522,210 @@ dialog>form input
 
 
 /* css for about us */
-
-.main-content .about-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex: 1 1 auto;
-  text-align: center;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px 20%;
-}
-.about-section{
-  margin: 20px 30px;
-}
-.about-section h1 {
-  font-size: 36px;
-  margin: 20px;
-	background-color:transparent;
-	color:#DC143C;
-	border-radius: 10%;
-	padding:10px;
-	width: 100%;
-
+.content-container
+{
+	--overlay-color: rgba(0, 0, 0, 0.5);
+	--overlay-color: var(--body-color);
+	background: linear-gradient(to right, var(--overlay-color), var(--accent-color-hover), var(--overlay-color));
+	background-size: cover;
+	padding: 2.5rem;
+	color: var(--secondary-text-color);
 }
 
-.about-section p {
-  font-size: 18px;
-  line-height: 1.4;
-  margin-bottom: 10px;
+.about-section,
+.faq-section,
+.term
+{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: 2rem;
+	width: 100ch;
+	margin-inline: auto;
+	background-color: #333;
+	border-radius: 10px;
+	box-shadow: 0 0.25rem 1.5rem 0.5rem rgba(0, 0, 0, 0.3);
+}
+
+.about-section h1,
+.faq-section h1,
+.term h1
+{
+	font-size: 2rem;
+	background-color: transparent;
+	color: var(--accent-color);
+	border-radius: 4px;
+	margin-block-end: 1rem;
+}
+
+.about-section p
+{
+	margin-bottom: 0.5rem;
 	color: white;
 }
 
-#aboutus{
-		
-height: 80vh;
-width: 100vw;
-display: flex;
-align-items: center;
-justify-content: center;
-	
-box-shadow: 0 10 20px #18053d;
-	
-background-color: rgba(252, 251, 251, 0.5);
-	}
-
-#aboutus::before{
-	filter: blur(2px);
-	position: fixed;
-} 
 
 
 /* css for faq */
-
-.main-content .faq-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  align-items: center;
-  flex: 1 1 auto;
-  text-align: center;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 10px;
-  margin: 2% 20%;
+.faq-section,
+.term
+{
+	width: 70%;
 }
 
-.faq-section h1 {
-  font-size: 36px;
-  margin-bottom: 20px;
+.faq-section h1,
+.term h1
+{
+	align-self: center;
+	font-size: 2rem;
+	margin-bottom: 20px;
 }
 
-.faq-item {
-  margin-bottom: 20px;
-  width: 100%;
-  text-align: left;
-  background-color: #444;
-  padding: 10px;
-  border-radius: 10px;
+
+.faq-item
+{
+	margin-bottom: 20px;
+	width: 100%;
+	text-align: left;
+	background-color: #444;
+	padding: 1rem;
+	border-radius: 8px;
 }
 
-.faq-question {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+.faq-question
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
 }
 
-.faq-question h3 {
-  font-size: 24px;
-  margin: 0;
+.faq-question h3
+{
+	font-size: 1.05rem;
 }
 
-.faq-answer {
-  display: none;
-  padding-top: 10px;
+.faq-answer
+{
+	display: none;
+	padding-top: 1rem;
 }
-.sign {
-  font-size: 24px;
-  margin-left: 10px;
-}
-#faq{
-		
-	height: 100vh;
-		
-	box-shadow: 0 10 20px #18053d;
-	
-	background-color: rgba(252, 251, 251, 0.5);
 
+.sign
+{
+	font-size: 24px;
+	margin-left: 1rem;
+	color: var(--accent-color);
 }
-#faq::before{
-	filter: blur(2px);
-		position: fixed;
-} 
-
 
 /* css for terms and conditions */
 
-.term {
-	max-width: 800px;
-	background-color: #333;
-	padding: 20px;
-	border-radius: 10px;
-	margin: 20px 20%;
+.term
+{
+	align-items: start;
+	text-align: left;
 }
 
-.term h2 {
-	color:white;
+.term h2
+{
+	color: white;
 	margin-top: 20px;
 }
 
-.term p {
+.term p
+{
 	color: white;
 	line-height: 1.6;
 }
 
-.term ul {
+.term ul
+{
 	color: white;
-	margin-top: 10px;
-	margin-bottom: 20px;
+	margin-inline-start: 1rem;
 }
 
-.term li {
-	margin-bottom: 10px;
+.hc
+{
+	width: 100ch;
 }
-
-.term h1 {
-
-	font-size: 36px;
-	margin: 20px;
-	background-color:transparent;
-	color:#DC143C;
-	border-radius: 10%;
-	padding:10px;
-	width: 100%;
-	/* margin-left: 0; */
-
-}
-
-.term ul{
-	font-size: 18px;
-	line-height: 1.4;
-	margin-bottom: 10px;
-	color:white;
-	
-}
-#tnc{
-		
-	height: 150vh;
-		
-	box-shadow: 0 10 20px #18053d;
-	
-	background-color: rgba(252, 251, 251, 0.5);
-
-}
-
-#tnc::before{
-	filter: blur(2px);
-		position: fixed;
-} 
-
-
-/* css for help center */
-
-#hc{
-		
-	height: 200vh;
-		
-	box-shadow: 0 10 20px #18053d;
-	
-	background-color: rgba(252, 251, 251, 0.5);
-
-}
-#hc::before{
-	filter: blur(2px);
-		position: fixed;
-} 
 
 /* css for footer section */
 
-footer {
-	background-color:#18053d;
-	padding: 15px;
-	text-align: left;
-
+footer
+{
+	background-color: #18053d;
+	padding: 1.5rem;
+	text-align: center;
+	color: gray;
 }
-footer a,p ,h4{
+
+footer a,
+footer p,
+footer h4
+{
 	color: gray;
 	text-decoration: none;
-	margin: 0 10px;
-	font-size: 18px;
+}
+
+footer a:hover
+{
+	color: white;
 }
 
 /* css for footer social media icons */
-.fa {
-  padding: 20px;
-  font-size: 20px;
-  width: 15px;
-	height:15px;
-  text-align:justify;
-  text-decoration: none;
-  margin: 3px 2px;
-  border-radius: 50%;
+footer h4
+{
+	margin-block-start: 1rem;
 }
 
-.fa:hover {
-    opacity: 0.7;
+.social-links
+{
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+	align-items: center;
+	margin-block-start: 0.25rem;
 }
 
-.fa-facebook {
-  background: #18053d;
-  color: white;
+.fa
+{
+	font-size: 20px;
+	text-decoration: none;
+	border-radius: 999px;
 }
 
-.fa-twitter {
-  background: #18053d;
-  color: white;
-}
-.fa.fa-twitter{
-	font-family:sans-serif;
-}
-.fa.fa-twitter::before{
-	content:"𝕏";
-	font-size:1.2em;
+.fa:hover
+{
+	opacity: 0.75;
 }
 
-.fa-google {
-  background: #18053d;
-  color: white;
+.fa-facebook
+{
+	background: #18053d;
+	color: white;
 }
 
+.fa-twitter
+{
+	background: #18053d;
+	color: white;
+}
+
+.fa.fa-twitter
+{
+	font-family: sans-serif;
+}
+
+.fa.fa-twitter::before
+{
+	content: "𝕏";
+	font-size: 1.2em;
+}
+
+.fa-google
+{
+	background: #18053d;
+	color: white;
+}
