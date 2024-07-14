@@ -5,7 +5,7 @@ import {
 	replaceLoginWithLogout,
 	handleLogout,
 } from "./auth.js";
-import { loadRootFolders, loadFolderContents } from "./folder.js";
+import { loadRootFolders, loadFolderContents, getCurrentFolderID, getCurrentFolderName } from "./folder.js";
 import {
 	showAddFolderModal,
 	hideAddFolderModal,
@@ -83,6 +83,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 	document
 		.getElementById("addFileModalContent")
 		.addEventListener("submit", handleAddFile);
+	
+	const sortSelect = document.getElementById("sortSelect");
+	sortSelect.addEventListener("change", () => {
+		loadFolderContents(getCurrentFolderID(), getCurrentFolderName());
+	});
 
 	homeButton.addEventListener("click", () => setCurrentview("home"));
 	directoryButton.addEventListener("click", () => setCurrentview("folder"));

@@ -2,131 +2,110 @@ import { loadFolderContents, handleDelete, setCurrentFolderID, setCurrentFolderN
 import { convertToDateFormat } from "./utils.js";
 import { url } from "./url.js";
 
-const updateDebounceText = debounce(async (text) =>
-{
-	await searchFoldersAndFiles(text);
+const sortSelect = document.getElementById("sortSelect");
+
+const updateDebounceText = debounce(async (text) => {
+    await searchFoldersAndFiles(text);
 });
 
-export function searchText(e)
-{
-	updateDebounceText(e.target.value);
+export function searchText(e) {
+    updateDebounceText(e.target.value);
 }
 
-function debounce(cb, delay = 1000)
-{
-	let timeout;
+function debounce(cb, delay = 1000) {
+    let timeout;
 
-	return (...args) =>
-	{
-		clearTimeout(timeout);
-		timeout = setTimeout(() =>
-		{
-			cb(...args);
-		}, delay);
-	};
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            cb(...args);
+        }, delay);
+    };
 }
 
-export async function searchFoldersAndFiles(query)
-{
-	try
-	{
-		const response = await fetch(`${url}/folders/search/?query=${ query }`);
-		const searchResults = await response.json();
-		const folderTableBody = document.querySelector("#folder-table tbody");
-		folderTableBody.innerHTML = '';
+export async function searchFoldersAndFiles(query) {
+    try {
+        const response = await fetch(`${url}/folders/search/?query=${query}`);
+        const searchResults = await response.json();
+        const folderTableBody = document.querySelector("#folder-table tbody");
+        folderTableBody.innerHTML = '';
 
-		if (query == "")
-		{
-			await loadFolderContents(0, "Root");
-			return;
-		}
+        if (query === "") {
+            await loadFolderContents(0, "Root");
+            return;
+        }
 
-		searchResults.data[0].folders.forEach((item) =>
-		{
-			const row = document.createElement("tr");
-			const nameCell = document.createElement("td");
-			nameCell.textContent = `${ item.Name } (${ item.Path })`;
-			row.appendChild(nameCell);
+        let items = [];
 
-			const actionsCell = document.createElement("td");
-			actionsCell.className = "action-container";
-			const openLink = document.createElement("button");
-			openLink.textContent = "Open";
-			openLink.className = "btn-small";
-			openLink.onclick = () =>
-			{
-				loadFolderContents(item.FolderID, item.Name);
-				setCurrentFolderID(item.FolderID);
-				setCurrentFolderName(item.Name);
-				return false;
-			};
-			actionsCell.appendChild(openLink);
+        searchResults.data[0].folders.forEach((item) => {
+            items.push({
+                ...item,
+                type: "folder"
+            });
+        });
 
-			if (localStorage.getItem('authToken'))
-			{
-				const deleteButton = document.createElement("button");
-				deleteButton.textContent = "Delete";
-				deleteButton.className = "btn-small delete-btn";
-				deleteButton.setAttribute('data-id', item.FolderID);
-				deleteButton.setAttribute('data-type', 'folder');
-				deleteButton.onclick = async () =>
-				{
-					await handleDelete(item.FolderID, 'folder');
-				};
-				actionsCell.appendChild(deleteButton);
-			}
-			row.appendChild(actionsCell);
+        searchResults.data[0].files.forEach((item) => {
+            items.push({
+                ...item,
+                type: "file"
+            });
+        });
 
-			const dateCell = document.createElement("td");
-			dateCell.textContent = convertToDateFormat(item.CreatedAt);
-			row.appendChild(dateCell);
-			
-			folderTableBody.appendChild(row);
-		});
+        const sortBy = sortSelect.value;
+        if (sortBy === "name") {
+            items.sort((a, b) => a.Name.localeCompare(b.Name));
+        } else if (sortBy === "date") {
+            items.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
+        }
 
-		searchResults.data[0].files.forEach((item) =>
-		{
-			const row = document.createElement("tr");
-			const nameCell = document.createElement("td");
-			nameCell.textContent = `${ item.Name } (${ item.Path })`; // Display the full file path
-			console.log("🚀 ~ searchResults.data[0].files.forEach ~ item:", item)
-			row.appendChild(nameCell);
+        items.forEach((item) => {
+            const row = document.createElement("tr");
+            const nameCell = document.createElement("td");
+            nameCell.textContent = `${item.Name} (${item.Path})`;
+            row.appendChild(nameCell);
 
-			const actionsCell = document.createElement("td");
-			actionsCell.className = "action-container";
-			const openLink = document.createElement("button");
-			openLink.textContent = "Open";
-			openLink.className = "btn-small";
-			openLink.onclick = () =>
-			{
-				window.open(`${url}${ item.URL }`, '_blank');
-				return false;
-			};
-			actionsCell.appendChild(openLink);
+            const actionsCell = document.createElement("td");
+            actionsCell.className = "action-container";
+            const openLink = document.createElement("button");
+            openLink.textContent = "Open";
+            openLink.className = "btn-small";
+            openLink.onclick = () => {
+                if (item.type === "folder") {
+                    loadFolderContents(item.FolderID, item.Name);
+                    setCurrentFolderID(item.FolderID);
+                    setCurrentFolderName(item.Name);
+                } else {
+                    window.open(`${url}${item.URL}`, '_blank');
+                }
+                return false;
+            };
+            actionsCell.appendChild(openLink);
 
-			if (localStorage.getItem('authToken'))
-			{
-				const deleteButton = document.createElement("button");
-				deleteButton.textContent = "Delete";
-				deleteButton.className = "btn-small delete-btn";
-				deleteButton.setAttribute('data-id', item.FileID);
-				deleteButton.setAttribute('data-type', 'file');
-				deleteButton.onclick = async () =>
-				{
-					await handleDelete(item.FileID, 'file');
-				};
-				actionsCell.appendChild(deleteButton);
-			}
-			row.appendChild(actionsCell);
+            if (localStorage.getItem('authToken')) {
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.className = "btn-small delete-btn";
+                deleteButton.setAttribute('data-id', item.FolderID || item.FileID);
+                deleteButton.setAttribute('data-type', item.type);
+                deleteButton.onclick = async () => {
+                    await handleDelete(item.FolderID || item.FileID, item.type);
+                };
+                actionsCell.appendChild(deleteButton);
+            }
+            row.appendChild(actionsCell);
 
-			const dateCell = document.createElement("td");
-			dateCell.textContent = convertToDateFormat(item.CreatedAt);
-			row.appendChild(dateCell);
+            const dateCell = document.createElement("td");
+            dateCell.textContent = convertToDateFormat(item.CreatedAt);
+            row.appendChild(dateCell);
 
-			folderTableBody.appendChild(row);
-		});
-	} catch (error)
-	{
-		alert('Error searching folders and files: ' + error.message);
-	}
+            folderTableBody.appendChild(row);
+        });
+    } catch (error) {
+        alert('Error searching folders and files: ' + error.message);
+    }
 }
+
+// sortSelect.addEventListener("change", () => {
+//     const query = document.getElementById("searchInput").value;
+//     searchFoldersAndFiles(query);
+// });

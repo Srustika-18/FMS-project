@@ -504,3 +504,17 @@ dialog>form input
 	background-color: var(--accent-color);
 	color: white;
 }
+
+.sort-table-header
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.sort-table-header select
+{
+	border: none;
+	border-radius: 4px;
+
+}

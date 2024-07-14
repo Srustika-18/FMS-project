@@ -5,8 +5,7 @@ import { url } from "./url.js";
 
 const sidenav = document.getElementById("sidenav");
 const folderTableBody = document.querySelector("#folder-table tbody");
-// let authToken = localStorage.getItem('authToken');
-// let currentUsername = localStorage.getItem('currentUsername');
+const sortSelect = document.getElementById("sortSelect");
 
 let currentFolderID = "0";
 let currentFolderName = "Root";
@@ -108,6 +107,19 @@ export async function loadFolderContents(folderId, folderName) {
 
 		const items = folderContents.data[0];
 		const totalItems = items.length;
+
+		// Get the sort criterion and sort the items
+		const sortBy = sortSelect.value;
+		if (sortBy === "a-z") {
+			items.sort((a, b) => a.Name.localeCompare(b.Name));
+		} else if (sortBy === "z-a") {
+			items.sort((a, b) => b.Name.localeCompare(a.Name));
+		} else if (sortBy === "recent") {
+			items.sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
+		} else if (sortBy === "oldest") {
+			items.sort((a, b) => new Date(a.CreatedAt) - new Date(b.CreatedAt));
+		}
+
 		const startIndex = (currentPage - 1) * itemsPerPage;
 		const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
