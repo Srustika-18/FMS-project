@@ -23,6 +23,7 @@ import { fetchNotices } from "./notices.js";
 document.addEventListener("DOMContentLoaded", async () => {
 	const homeButton = document.getElementById("homeButton");
 	const directoryButton = document.getElementById("directoryButton");
+	const sectionsToHide = document.querySelectorAll('#faq, #aboutus, #tnc, #hc');
 
 	document
 		.getElementById("loginButton")
@@ -52,6 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		document.getElementById("addFolderButton").style.display = "none";
 		document.getElementById("addRootFolderButton").style.display = "none";
 		document.getElementById("addFileButton").style.display = "none";
+		hideSectionsAfterLogin();
 	}
 
 	document
@@ -99,7 +101,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 // setCurrentview("folder");
 // export { setCurrentview };
 
-
+function hideSectionsAfterLogin() {
+	const sectionsToHide = document.querySelectorAll('#faq, #aboutus, #tnc, #hc');
+	sectionsToHide.forEach(section => section.style.display = 'none');
+}
 
 
 
