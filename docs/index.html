@@ -4,11 +4,28 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/webp" href="images/railway.png" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<title>East Coast Railway</title>
 		<meta name="theme-color" content="#a365ed" />
 		<link rel="stylesheet" href="reset.css" />
 		<link rel="stylesheet" href="styles.css" />
 		<script defer type="module" src="script.js"></script>
+
+		<script>
+			function toggleAnswer(event) {
+					const question = event.currentTarget;
+					const answer = question.nextElementSibling;
+					const sign = question.querySelector('.sign');
+					if (answer.style.display === 'block') {
+							answer.style.display = 'none';
+							sign.textContent = '+';
+					} else {
+							answer.style.display = 'block';
+							sign.textContent = '-';
+					}
+			}
+	</script>
+
 	</head>
 	<body>
 		<!-- Login Modal -->
@@ -109,12 +126,12 @@
 				<h1>East Coast Railway</h1>
 			</div>
 			<nav>
-				<button type="button" class="nav-btn" id="homeButton">
-					Home
-				</button>
-				<button type="button" class="nav-btn" id="directoryButton">
-					Directory
-				</button>
+				<button type="button" class="nav-btn" id="homeButton">Home</button>
+				<button type="button" class="nav-btn" id="directoryButton">Directory</button>
+				<button type="button" class="nav-btn"><a href="#aboutus">About us</a></button>
+				<button type="button" class="nav-btn"><a href="#faq">FAQ</a></button>
+				<button type="button" class="nav-btn"><a href="#tnc">TnC</a></button>
+				<button type="button" class="nav-btn"><a href="#hc">Help Center</a></button>
 				<button class="btn-small" id="loginButton">Log In</button>
 			</nav>
 		</header>
@@ -200,5 +217,233 @@
 			</div>
 		</div>
 		<script src="dummyData.js"></script>
+
+		<div class="content">
+			<!-- section of about us -->
+
+		<section id="aboutus">
+				<div class="main-content">
+					<div class="about-section">
+							<h1>About Us</h1>
+							<p>Welcome to File Management System, where we strive to provide comprehensive solutions and services to our users. Our mission is to connect, inform, and empower individuals and organizations through our platform. We believe in the power of information and its ability to transform lives and industries.</p>
+							<p>Our team is dedicated to maintaining the highest standards of quality and service. With expertise across various domains, we work tirelessly to ensure that our platform remains a reliable and valuable resource for all our users.</p>
+							<p>We are committed to continuous improvement and innovation, and we welcome feedback and suggestions from our community. Thank you for being a part of FMS.</p>
+					</div>
+			</div>
+			</section>
+			<br>
+			<br>
+			<br>
+
+
+			<!-- //section of faq -->
+
+
+			<section id="faq">
+
+				<div class="main-content">
+					<div class="faq-section">
+							<h1>Frequently Asked Questions</h1>
+							<div class="faq-item">
+									<div class="faq-question" onclick="toggleAnswer(event)">
+											<h3>Q1: What is ADD FMS NAME?</h3>
+											<span class="sign">+</span>
+									</div>
+									<div class="faq-answer">
+											<p>ADD FMS NAME is a platform that provides comprehensive solutions and services to connect, inform, and empower individuals and organizations.</p>
+									</div>
+							</div>
+							<div class="faq-item">
+									<div class="faq-question" onclick="toggleAnswer(event)">
+											<h3>Q2: How do I create an account?</h3>
+											<span class="sign">+</span>
+									</div>
+									<div class="faq-answer">
+											<p>You can create an account by clicking the "Log In" button on the top right corner and then selecting the "Sign Up" option.</p>
+										</div>
+									</div>
+									<div class="faq-item">
+											<div class="faq-question" onclick="toggleAnswer(event)">
+													<h3>Q3: How can I contact customer support?</h3>
+													<span class="sign">+</span>
+											</div>
+											<div class="faq-answer">
+													<p>You can contact our customer support through the "Contact us" link in the footer of the page.</p>
+											</div>
+									</div>
+									<div class="faq-item">
+											<div class="faq-question" onclick="toggleAnswer(event)">
+													<h3>Q4: Can I contribute to the platform?</h3>
+													<span class="sign">+</span>
+											</div>
+											<div class="faq-answer">
+													<p>Yes, we welcome contributions from our community. Please contact us for more details on how you can contribute.</p>
+											</div>
+									</div>
+									<div class="faq-item">
+										<div class="faq-question" onclick="toggleAnswer(event)">
+												<h3>Q5: Where can I find more information about your services?</h3>
+												<span class="sign">+</span>
+										</div>
+										<div class="faq-answer">
+												<p>More information about our services can be found on the "About us" page and by exploring the "Categories" section.</p>
+										</div>
+								</div>
+						</div>
+					</div>
+					
+				</section>
+				<br>
+				<br>
+				<br>
+
+
+	<!-- section for terms and conditions -->
+			
+	<section id="tnc">
+		<div class="main-content">
+		<div class="term">
+			<center><h1>TERMS AND CONDITIONS</h1></center>
+			<h2>Introduction</h2>
+			<p>Welcome to the Railway File Management System. These terms and conditions outline the rules and regulations
+					for the use of our platform.</p>
+
+			<h2>Intellectual Property Rights</h2>
+			<p>Other than the content you own, under these terms, Railway File Management System and/or its licensors own
+					all the intellectual property rights and materials contained in this Website.</p>
+
+			<h2>Restrictions</h2>
+			<p>You are specifically restricted from all of the following:</p>
+			<ul>
+					<li>Publishing any Website material in any other media</li>
+					<li>Selling, sublicensing and/or otherwise commercializing any Website material</li>
+					<li>Using this Website in any way that is or may be damaging to this Website</li>
+					<li>Using this Website contrary to applicable laws and regulations, or in any way may cause harm to the
+						Website, or to any person or business entity</li>
+		</ul>
+
+		<h2>Disclaimer</h2>
+		<p>This Website is provided "as is," with all faults, and Railway File Management System makes no express or
+				implied representations or warranties, of any kind related to this Website or the materials contained on
+				this Website.</p>
+
+		<h2>Changes to These Terms and Conditions</h2>
+		<p>We reserve the right to modify these terms from time to time at our sole discretion. Therefore, you should
+				review these pages periodically. Your continued use of the Website or our service after any such change
+				constitutes your acceptance of the new Terms and Conditions.</p>
+
+		<h2>Contact Information</h2>
+		<p>If you have any questions or concerns about these Terms and Conditions, please contact us.</p>
+</div>
+		</div>
+</section>
+<br>
+<br>
+<br>
+
+
+
+<!-- section for help center -->
+
+<section id="hc">
+	<div class="main-content">
+	<div class="term">
+		<center><h1>HELP CENTER</h1></center>
+		
+		<p>Welcome to the Help Center for the File Management System of East Coast Railway's website. This section aims to guide you through the various functionalities and features of our file management system, ensuring you can efficiently manage and access documents related to railway operations and administration.</p>
+
+		<h2>Overview</h2>
+		<p>The File Management System (FMS) is designed to streamline document handling and facilitate efficient information retrieval across departments within East Coast Railway. It provides robust features to manage documents, ensuring compliance with regulatory standards and enhancing operational efficiency.</p>
+
+		<h2>Key Features</h2>
+		
+		<ul>
+				<li><b>Document Upload and Storage</b></li>
+				<ul>
+					<li>Easily upload documents related to railway operations, administration, and projects.
+					</li>
+					<li>Classify documents by categories such as project files, operational documents, administrative records, etc.</li>
+					<li>Store documents securely with access controls to maintain confidentiality.</li>
+				</ul>
+
+
+
+				<li><b>Document Versioning and Tracking</b></li>
+				<ul>
+					<li>EMaintain a history of document versions to track changes over time.
+						</li>
+					<li>Easily revert to previous versions if needed, ensuring document integrity and traceability.</li>
+					
+				</ul>
+
+				<li><b>Search and Retrieval</b></li>
+				<ul>
+					<li>Powerful search capabilities to quickly locate documents based on keywords, tags, or metadata.
+						</li>
+						<li>Filter documents by date, category, author, and other attributes for precise retrieval.</li>
+								
+					</ul>
+
+					<li><b>Collaboration and Sharing</b></li>
+					<ul>
+						<li>Facilitate collaboration by sharing documents securely with authorized personnel or teams.
+						</li>
+						<li>Enable commenting and feedback on documents to streamline communication and decision-making processes.</li>
+						
+					</ul>
+
+					<li><b>Access Control and Security</b></li>
+					<ul>
+						<li>mplement role-based access control (RBAC) to restrict access to sensitive documents.
+							
+						</li>
+						<li>Ensure compliance with data protection regulations and internal security policies.</li>
+						
+					</ul>
+				</ul>
+	
+				
+					
+	
+				<h2>Support and Assistance</h2>
+				<p>
+					For any technical assistance, questions, or feedback regarding the File Management System, please contact our support team at support@eastcoastrailway.com or call our helpline at +1-800-XXX-XXXX. Our team is available to assist you during business hours, Monday through Friday.
+					</p><p>
+					We hope this Help Center provides you with the necessary guidance to effectively utilize the File Management System for your operational needs at East Coast Railway. Thank you for choosing our services!</p>
+		</div>
+	</div>
+		</section>
+
+	</div>
+
+	<!-- footer section -->
+
+	<footer>
+			
+		<center><p> &copy; Copyright <strong><span>FSM</span></strong>. All Rights Reserved</p>
+			<a href="#tnc">Terms and Conditions</a> |
+			<a href="#hc">Help Center</a> |
+			<a href="#aboutus">About us</a> |
+			<a href="#faq">FAQ</a>
+			
+
+			<div class="col-lg-3 col-md-6 footer-links">
+				<h4>Follow </h4>
+				<div class="social-links" >
+					<a href="https://www.facebook.com/EASTCOASTRailway1" class="fa fa-facebook"></a>
+					<a href="https://x.com/EastCoastRail" class="fa fa-twitter"></a>
+          <a href="https://eastcoastrail.indianrailways.gov.in/TenderDetails_cpp.jsp?T_ID=6700&lang=0&id=0" class="fa fa-google"></a>
+					
+				</div>
+			</div>
+		
+</footer>
+
+
+
+	
+
+
+
 	</body>
 </html>
