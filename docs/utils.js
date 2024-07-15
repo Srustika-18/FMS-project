@@ -7,14 +7,12 @@ export function convertToDateFormat(inputDateString)
 	const day = date.getUTCDate();
 	const month = date.toLocaleString("en-US", {
 		month: "short",
-		timeZone: "UTC",
 	});
 	const year = date.getUTCFullYear().toString().slice(-2);
 	const time = date.toLocaleString("en-US", {
 		hour: "numeric",
 		minute: "numeric",
 		hour12: true,
-		timeZone: "UTC",
 	});
 	const formattedDate = `${ day } ${ month } '${ year } at ${ time }`;
 	return formattedDate;

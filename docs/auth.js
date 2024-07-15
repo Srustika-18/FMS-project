@@ -1,29 +1,35 @@
-import {
+import
+{
 	loadRootFolders,
 	loadFolderContents,
 	getCurrentFolderID,
 	getCurrentFolderName,
 } from "./folder.js";
+import { hideSectionsAfterLogin, showSectionsAfterLogout } from './ui.js'
 
 let authToken = localStorage.getItem("authToken");
 let currentUsername = localStorage.getItem("currentUsername");
 
-export function showLoginModal() {
+export function showLoginModal()
+{
 	const loginModal = document.getElementById("loginModal");
 	loginModal.showModal();
 }
 
-export function hideLoginModal() {
+export function hideLoginModal()
+{
 	const loginModal = document.getElementById("loginModal");
 	loginModal.close();
 }
 
-export async function handleLogin(e) {
+export async function handleLogin(e)
+{
 	e.preventDefault();
 	const username = document.getElementById("username").value;
 	const password = document.getElementById("password").value;
 
-	try {
+	try
+	{
 		const response = await fetch("http://localhost:8000/admin/token", {
 			method: "POST",
 			headers: {
@@ -35,7 +41,8 @@ export async function handleLogin(e) {
 			}),
 		});
 
-		if (!response.ok) {
+		if (!response.ok)
+		{
 			throw new Error("Login failed");
 		}
 
@@ -59,19 +66,23 @@ export async function handleLogin(e) {
 		document.getElementById("addRootFolderButton").style.display =
 			"inline-block";
 		document.getElementById("addFileButton").style.display = "inline-block";
-	} catch (error) {
+		hideSectionsAfterLogin();
+	} catch (error)
+	{
 		alert("Login failed: " + error.message);
 	}
 }
 
-export function replaceLoginWithLogout() {
+export function replaceLoginWithLogout()
+{
 	const loginButton = document.getElementById("loginButton");
 	loginButton.textContent = "Log Out";
 	loginButton.removeEventListener("click", showLoginModal);
 	loginButton.addEventListener("click", handleLogout);
 }
 
-export function handleLogout() {
+export function handleLogout()
+{
 	authToken = null;
 	currentUsername = null;
 	localStorage.removeItem("authToken");
@@ -83,5 +94,6 @@ export function handleLogout() {
 	document.getElementById("addFolderButton").style.display = "none";
 	document.getElementById("addRootFolderButton").style.display = "none";
 	document.getElementById("addFileButton").style.display = "none";
+	showSectionsAfterLogout();
 	loadFolderContents(getCurrentFolderID(), getCurrentFolderName()); // Refresh folder contents
 }

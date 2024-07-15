@@ -20,6 +20,8 @@ export function hideAddFileModal()
 {
 	addFileModal.close();
 	document.getElementById("newFileName").value = "";
+	document.getElementById("newFileDescription").value = "";
+	console.log(document.getElementById("newFileDescription").value);
 }
 
 export async function handleAddFile(e)
