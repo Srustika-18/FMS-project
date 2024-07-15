@@ -106,12 +106,10 @@ const sectionsToTarget = document.querySelectorAll('#faq, #aboutus, #tnc, #hc, .
 
 export function hideSectionsAfterLogin()
 {
-	console.log("hello");
 	sectionsToTarget.forEach(section => section.style.display = 'none');
 }
 
 export function showSectionsAfterLogout()
 {
-	console.log("hello2");
 	sectionsToTarget.forEach(section => section.style.display = 'block');
 }
