@@ -1,14 +1,14 @@
 // ui.js
 import
-{
-	loadFolderContents,
-	getCurrentFolderID,
-	setCurrentFolderID,
-	getCurrentFolderName,
-	setCurrentFolderName,
-	getCurrentFolderHistory,
-	setCurrentFolderHistory,
-} from "./folder.js";
+	{
+		loadFolderContents,
+		getCurrentFolderID,
+		setCurrentFolderID,
+		getCurrentFolderName,
+		setCurrentFolderName,
+		getCurrentFolderHistory,
+		setCurrentFolderHistory,
+	} from "./folder.js";
 
 export function updateBreadcrumb()
 {
@@ -87,6 +87,9 @@ function folderShow(isShow)
 		homeButton.classList.add("nav-hover");
 		directoryButton.classList.remove("nav-hover");
 		document.querySelector(".main-content").classList.add("diff-bg");
+		document
+			.querySelectorAll("#faq, #aboutus, #tnc, #hc")
+			.forEach((section) => (section.style.display = "block"));
 	} else
 	{
 		document.querySelector(".heading-container").style.display = "flex";
@@ -98,18 +101,22 @@ function folderShow(isShow)
 		homeButton.classList.remove("nav-hover");
 		directoryButton.classList.add("nav-hover");
 		document.querySelector(".main-content").classList.remove("diff-bg");
+		document
+			.querySelectorAll("#faq, #aboutus, #tnc, #hc")
+			.forEach((section) => (section.style.display = "none"));
 	}
 }
 
-
-const sectionsToTarget = document.querySelectorAll('#faq, #aboutus, #tnc, #hc, .nav-btn:has(a)');
+const sectionsToTarget = document.querySelectorAll(
+	"#faq, #aboutus, #tnc, #hc, .nav-btn:has(a)"
+);
 
 export function hideSectionsAfterLogin()
 {
-	sectionsToTarget.forEach(section => section.style.display = 'none');
+	sectionsToTarget.forEach((section) => (section.style.display = "none"));
 }
 
 export function showSectionsAfterLogout()
 {
-	sectionsToTarget.forEach(section => section.style.display = 'block');
+	sectionsToTarget.forEach((section) => (section.style.display = "block"));
 }
