@@ -13,7 +13,7 @@ origins = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://fms-project.onrender.com",
-    "https://srustika-18.github.io/FMS-project"
+    "https://srustika-18.github.io"
 ]
 
 app.add_middleware(
