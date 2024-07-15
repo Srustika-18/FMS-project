@@ -1,6 +1,5 @@
 // ui.js
-import
-{
+import {
 	loadFolderContents,
 	getCurrentFolderID,
 	setCurrentFolderID,
@@ -10,8 +9,7 @@ import
 	setCurrentFolderHistory,
 } from "./folder.js";
 
-export function updateBreadcrumb()
-{
+export function updateBreadcrumb() {
 	const breadcrumbNav = document.querySelector("#breadcrumb .nav-wrapper");
 	breadcrumbNav.innerHTML = ""; // Clear existing breadcrumbs
 
@@ -31,14 +29,12 @@ export function updateBreadcrumb()
 	// breadcrumbNav.appendChild(rootBreadcrumb);
 
 	// Add breadcrumbs for each folder in history
-	getCurrentFolderHistory().forEach((folder, index) =>
-	{
+	getCurrentFolderHistory().forEach((folder, index) => {
 		const breadcrumbLink = document.createElement("p");
 		// breadcrumbLink.href = "#!";
 		breadcrumbLink.textContent = folder.name;
 		breadcrumbLink.className = "breadcrumb";
-		breadcrumbLink.onclick = () =>
-		{
+		breadcrumbLink.onclick = () => {
 			loadFolderContents(folder.id, folder.name);
 			setCurrentFolderID(folder.id);
 			setCurrentFolderName(folder.name);
@@ -50,8 +46,7 @@ export function updateBreadcrumb()
 	});
 
 	// Add current folder to breadcrumb
-	if (getCurrentFolderID() !== "0")
-	{
+	if (getCurrentFolderID() !== "0") {
 		const currentBreadcrumb = document.createElement("p");
 		// currentBreadcrumb.href = "#!";
 		currentBreadcrumb.textContent = getCurrentFolderName();
@@ -62,22 +57,17 @@ export function updateBreadcrumb()
 
 let currentview = "home";
 
-export function setCurrentview(view = "home")
-{
+export function setCurrentview(view = "home") {
 	currentview = view;
-	if (currentview == "home")
-	{
+	if (currentview == "home") {
 		folderShow(true);
-	} else
-	{
+	} else {
 		folderShow(false);
 	}
 }
 
-function folderShow(isShow)
-{
-	if (isShow)
-	{
+function folderShow(isShow) {
+	if (isShow) {
 		document.querySelector(".heading-container").style.display = "none";
 		document.querySelector(".btn-container").style.display = "none";
 		document.querySelector("table").style.display = "none";
@@ -87,8 +77,10 @@ function folderShow(isShow)
 		homeButton.classList.add("nav-hover");
 		directoryButton.classList.remove("nav-hover");
 		document.querySelector(".main-content").classList.add("diff-bg");
-	} else
-	{
+		document
+			.querySelectorAll("#faq, #aboutus, #tnc, #hc")
+			.forEach((section) => (section.style.display = "block"));
+	} else {
 		document.querySelector(".heading-container").style.display = "flex";
 		document.querySelector(".btn-container").style.display = "flex";
 		document.querySelector("table").style.display = "table";
@@ -98,20 +90,22 @@ function folderShow(isShow)
 		homeButton.classList.remove("nav-hover");
 		directoryButton.classList.add("nav-hover");
 		document.querySelector(".main-content").classList.remove("diff-bg");
+		document
+			.querySelectorAll("#faq, #aboutus, #tnc, #hc")
+			.forEach((section) => (section.style.display = "none"));
 	}
 }
 
+const sectionsToTarget = document.querySelectorAll(
+	"#faq, #aboutus, #tnc, #hc, .nav-btn:has(a)"
+);
 
-const sectionsToTarget = document.querySelectorAll('#faq, #aboutus, #tnc, #hc, .nav-btn:has(a)');
-
-export function hideSectionsAfterLogin()
-{
+export function hideSectionsAfterLogin() {
 	console.log("hello");
-	sectionsToTarget.forEach(section => section.style.display = 'none');
+	sectionsToTarget.forEach((section) => (section.style.display = "none"));
 }
 
-export function showSectionsAfterLogout()
-{
+export function showSectionsAfterLogout() {
 	console.log("hello2");
-	sectionsToTarget.forEach(section => section.style.display = 'block');
+	sectionsToTarget.forEach((section) => (section.style.display = "block"));
 }
