@@ -141,6 +141,11 @@ async def delete_folder(id: str):
         async for file in files.find({"FolderID": id}):
             await delete_file(str(file["_id"]))
 
+        # Retrieve and delete all subfolders recursively
+        async for subfolder in folders.find({"ParentfolderID": id}):
+            await delete_folder(str(subfolder["_id"]))
+
+        # Finally, delete the folder itself
         await folders.delete_one({"_id": PyObjectId(id)})
         return True
     return False
