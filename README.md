@@ -51,5 +51,5 @@ uvicorn app.main:app --reload
 
 ### 6. Visit the website at
 
-[East Coast Railway](http://127.0.0.1:8000/)
-( http://127.0.0.1:8000/ )
+[East Coast Railway](https://srustika-18.github.io/FMS-project)
+( https://srustika-18.github.io/FMS-project )
