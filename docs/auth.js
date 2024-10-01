@@ -5,6 +5,7 @@ import
 	getCurrentFolderID,
 	getCurrentFolderName,
 } from "./folder.js";
+import { url } from "./url.js";
 import { hideSectionsAfterLogin, showSectionsAfterLogout } from './ui.js'
 
 let authToken = localStorage.getItem("authToken");
