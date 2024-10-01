@@ -30,7 +30,7 @@ export async function handleLogin(e)
 
 	try
 	{
-		const response = await fetch("http://localhost:8000/admin/token", {
+		const response = await fetch(`${ url }/admin/token`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
